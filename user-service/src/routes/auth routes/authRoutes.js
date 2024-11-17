@@ -54,7 +54,7 @@ router.get(
 );  
 
 router.get(
-  "/oauth2/redirect/google",
+  "/oauth2/redirect/google", 
   checkNotAuthenticated,
   (req, res, next) => {
     passport.authenticate("google", (err, user, info) => {
@@ -85,19 +85,19 @@ router.get(
     passport.authenticate("facebook", (err, user, info) => {
       if (err) {
         // Handle the error and send a JSON response
-        return res.status(500).json({msg : 'Internal server error'}, err.message);
+        return res.status(500).json({msg : 'Internal server error', err });
       }
   
       if (!user) {
         // Authentication failed, send a specific error message
-        return res.status(400).json({msg : 'Authentication failed'}, info);
+        return res.status(400).json({msg : 'Authentication failed', info});
       }
   
       // If authentication is successful, log in the user
       req.logIn(user, (loginErr) => {
         if (loginErr) {
           // Handle login error
-          return res.status(500).json({msg : 'Login error'},loginErr.message);
+          return res.status(500).json({msg : 'Login error',loginErr});
         }
   
         // Successful login, send user information

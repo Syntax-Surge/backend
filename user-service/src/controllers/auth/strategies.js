@@ -76,6 +76,7 @@ passport.use(
 
 
       try {
+        console.log('profile :', profile )
         // console.log("facebook signin");
         let user = await User.findOne({
           where: {
