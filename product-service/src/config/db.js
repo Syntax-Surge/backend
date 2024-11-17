@@ -33,10 +33,19 @@ const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
+    
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
 };
 
+const Category = require('../models/category.model')(sequelize, Sequelize)
 
-module.exports = { connectDB };
+const db = {
+  sequelize,
+  Sequelize,
+  Category,
+  connectDB,
+}
+module.exports = db;
+// module.exports = { Category, connectDB, sequelize };
