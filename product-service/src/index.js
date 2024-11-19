@@ -20,6 +20,8 @@ db.sequelize.sync().then(function(){
 })
 
 // Other middlewares and routes setup here
+const productOpRoutes = require('./routes/productOp routes/productOp.route');
+app.use('/items',productOpRoutes);
 
 const PORT = process.env.PORT;
 
