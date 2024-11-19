@@ -1,5 +1,6 @@
 // db.js
 const { Sequelize } = require('sequelize');
+const { SequelizeMethod } = require('sequelize/lib/utils');
 require('dotenv').config();
 
 const server = process.env.SQL_SERVER;
@@ -40,11 +41,12 @@ const connectDB = async () => {
 };
 
 const Category = require('../models/category.model')(sequelize, Sequelize)
-
+const Product = require("../models/product.model")(sequelize, SequelizeMethod)
 const db = {
   sequelize,
   Sequelize,
   Category,
+  Product,
   connectDB,
 }
 module.exports = db;
