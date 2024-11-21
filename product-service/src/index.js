@@ -12,12 +12,17 @@ app.use(cors());
 
 
 // Initialize DB Connection
-connectDB();
+// connectDB();
 
+app.get('/', (req,res)=>{
+  console.log("product");
+  res.status(200).json({"service":"product"})
+  
+});
 // Other middlewares and routes setup here
 
 const PORT = process.env.PORT;
 
-app.listen(PORT, () => {
-  console.log(`Service running on port ${PORT}`);
+app.listen(3004, () => {
+  console.log(`Service running on port 3004`);
 });
