@@ -1,0 +1,1 @@
+This folder contains the api routes of product search, Filter and browse by categories.

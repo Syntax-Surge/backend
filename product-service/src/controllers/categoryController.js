@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler")
 const {Category} = require("../config/db");
+const { Op } = require('sequelize');
+const cloudinary = require('../config/cloudinaryConfig');
 
 const getCategories = asyncHandler(async (req, res) => {
     console.log("Get Category");
@@ -39,14 +41,36 @@ const getCategories = asyncHandler(async (req, res) => {
     }
 })
 
+const getSubCategories = asyncHandler(async (req, res) => {
+    console.log("Get Sub Category");
+    try {
+        // Fetch categories along with their subcategories
+        const subCategories = await Category.findAll({
+            where: {
+                parent_id: { [Op.ne]: null }
+            }
+        });
+
+        // Map data into the desired format
+        const formattedSubCategories = subCategories.map((subCategory) => ({
+            id: subCategory.id,
+            name: subCategory.name,
+            description: subCategory.description,
+            image: subCategory.image
+        }));
+        res.status(200).json(formattedSubCategories);
+    } catch (error) {
+        res.status(400);
+        throw new Error(error.message || "Can't get Sub Categories");
+    }
+})
+
 const createCategory = asyncHandler(async (req, res) => {
-    console.log("hello");
     const { name, parentValue, description, image} = req.body
     if (!name) {
         res.status(400).send({ message: "Missing required fields!" });
         return
     }
-
 
     else {     
         var parent_id = parentValue;
@@ -87,15 +111,30 @@ const updateCategory = asyncHandler(async (req, res) => {
         res.status(400).send({ message: "Missing required fields!" });
         return
     }
-    else {
-        const existingCategory = await Category.findOne({ where: { id: id } });
+    else {        
+        try {   
+            const existingCategory = await Category.findOne({ where: { id: id } });
 
-        if (!existingCategory) {
-            res.status(404).send({ message: `Cannot find the Category ${id}` });
-            return;
-        }
-        
-        try {        
+            if (!existingCategory) {
+                res.status(404).send({ message: `Cannot find the Category ${id}` });
+                return;
+            }
+
+            // Delete the old image if it exists
+            if (existingCategory.image) {
+                const imageUrl = existingCategory.image;
+                
+                // Use regex to extract the public ID from the URL
+                const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)\.\w+$/); 
+                const publicId = publicIdMatch ? publicIdMatch[1] : null;
+
+                if (publicId) {
+                    await cloudinary.uploader.destroy(publicId);
+                } else {
+                    console.warn("Unable to extract publicId from:", imageUrl);
+                }
+            }
+
             var parent_id = parentValue;
 
             if (parent_id == "") {
@@ -127,15 +166,28 @@ const deleteCategory = asyncHandler(async (req, res) => {
         res.status(400).send({ message: `Can't remove, Invalid Category ${id}` });
         return
     }
-
-    const existingCategory = await Category.findOne({ where: { id: id } });
-
-    if (!existingCategory) {
-        res.status(404).send({ message: `Cannot find the Category ${id}` });
-        return;
-    }
-
     try {
+        const existingCategory = await Category.findOne({ where: { id: id } });
+
+        if (!existingCategory) {
+            res.status(404).send({ message: `Cannot find the Category ${id}` });
+            return;
+        }
+
+        if (existingCategory.image) {
+            const imageUrl = existingCategory.image;
+            
+            // Use regex to extract the public ID from the URL
+            const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)\.\w+$/); 
+            const publicId = publicIdMatch ? publicIdMatch[1] : null;
+
+            if (publicId) {
+                await cloudinary.uploader.destroy(publicId);
+            } else {
+                console.warn("Unable to extract publicId from:", imageUrl);
+            }
+        }
+        
         await Category.destroy({ where: { parent_id: id } });
 
         const data = await Category.destroy({
@@ -150,4 +202,4 @@ const deleteCategory = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = {createCategory, updateCategory, getCategories, deleteCategory};
+module.exports = {createCategory, updateCategory, getCategories, deleteCategory, getSubCategories};
