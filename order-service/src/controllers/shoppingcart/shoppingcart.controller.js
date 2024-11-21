@@ -1,52 +1,102 @@
-const { ShoppingCart } = require("../../config/db");
+const asyncHandler = require("express-async-handler");
+const { ShoppingCart } = require("../../config/db.js");
 
-// Add Items to user cart
-const addToCart = async (req, res) => {
+// Add to Cart
+const addToCart = asyncHandler(async (req, res) => {
+  const { userId, productId, quantity } = req.body;
+console.log("fkk",userId, productId, quantity);
+
+  if (!userId || !productId || !quantity) {
+    res.status(400).json({ message: "Missing required fields!" });
+    return;
+  }
+
   try {
-    let userData = await userModel.findById(req.body.userId);
-    let cartData = await userData.cartData;
+    // Check if the product already exists in the user's cart
+    const existingCartItem = await ShoppingCart.findOne({
+      where: { userId, productId },
+    });
+    console.log("dddd",existingCartItem);
+    
 
-    if (!cartData[req.body.itemId]) {
-      cartData[req.body.itemId] = 1;
-    } else {
-      cartData[req.body.itemId] += 1;
+    if (existingCartItem) {
+      // If exists, update the quantity
+      existingCartItem.quantity += quantity;
+      await existingCartItem.save();
+      return res.status(200).json(existingCartItem);
     }
-    await userModel.findByIdAndUpdate(req.body.userId, { cartData });
-    res.json({ success: true, messaga: "Added To Cart" });
+
+    // If not, create a new cart item
+    const cartItem = await ShoppingCart.create({
+      userId,
+      productId,
+      quantity,
+    });
+
+    res.status(201).json(cartItem);
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, messaga: "Error" });
+    res.status(500);
+    throw new Error(error.message || "Error adding item to cart.");
   }
-};
+});
 
-//Remove items from user cart
+// Remove from Cart
+const removeCart = asyncHandler(async (req, res) => {
+  const { userId, productId } = req.body;
 
-const removeFromCart = async (req, res) => {
+  if (!userId || !productId) {
+    res.status(400).json({ message: "Missing required fields!" });
+    return;
+  }
+
   try {
-    let userData = await userModel.findById(req.body.userId);
-    let cartData = await userData.cartData;
-    if (cartData[req.body.itemId] > 0) {
-      cartData[req.body.itemId] -= 1;
+    const cartItem = await ShoppingCart.findOne({
+      where: { userId, productId },
+    });
+
+    if (!cartItem) {
+      res.status(404).json({ message: "Cart item not found!" });
+      return;
     }
-    await userModel.findByIdAndUpdate(req.body.userId, { cartData });
-    res.json({ success: true, messaga: "Removed From Cart." });
+
+    await cartItem.destroy();
+    res.status(200).json({ message: "Item removed from cart successfully!" });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, messaga: "Error" });
+    res.status(500);
+    throw new Error(error.message || "Error removing item from cart.");
   }
-};
+});
 
-// Fetch user cart data
+// Get Cart
+const getCart = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
 
-const getCart = async (req, res) => {
+  if (!userId) {
+    res.status(400).json({ message: "Missing user ID!" });
+    return;
+  }
+
   try {
-    let userData = await userModel.findById(req.body.userId);
-    let cartData = await userData.cartData;
-    res.json({ success: true, cartData });
-  } catch (error) {
-    console.log(error);
-    res.json({ success: false, messaga: "Error" });
-  }
-};
+    const cartItems = await ShoppingCart.findAll({
+      where: { userId },
+      // include: [
+      //   {
+      //     model: Product, // Assuming you have a Product model
+      //     attributes: ["id", "name", "price", "image"], // Select only required fields
+      //   },
+      // ],
+    });
 
-module.export = { addToCart, removeFromCart, getCart };
+    if (!cartItems.length) {
+      res.status(404).json({ message: "No items in the cart!" });
+      return;
+    }
+
+    res.status(200).json(cartItems);
+  } catch (error) {
+    res.status(500);
+    throw new Error(error.message || "Error fetching cart items.");
+  }
+});
+
+module.exports = { addToCart, removeCart, getCart };
