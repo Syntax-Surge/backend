@@ -3,11 +3,10 @@ require('dotenv').config();
 const cors = require('cors');
 const { connectDB } = require('./config/db');
 const db = require('./config/db');
-
-
+const categoryRoutes = require('./routes/categoryRoutes');
+const productOpRoutes = require('./routes/productOp routes/productOp.route');
 
 const app = express();
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,8 +19,9 @@ db.sequelize.sync().then(function(){
 })
 
 // Other middlewares and routes setup here
-const productOpRoutes = require('./routes/productOp routes/productOp.route');
-app.use('/items',productOpRoutes);
+app.use('/api/v1/categories', categoryRoutes);
+
+app.use('/api/v1/products', productOpRoutes);
 
 const PORT = process.env.PORT;
 
