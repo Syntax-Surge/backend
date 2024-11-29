@@ -21,7 +21,7 @@ db.sequelize.sync().then(function () {
 const cartRouter = require("./routes/shoppingCart.route");
 
 // api endpoints
-app.use("/api/cart/", cartRouter);
+app.use("/api/v1/cart/", cartRouter);
 
 const PORT = process.env.PORT;
 

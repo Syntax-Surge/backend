@@ -2,23 +2,29 @@ syntax = "proto3";
 
 package product;
 
-// The Product service definition
 service ProductService {
     rpc GetProductById(ProductRequest) returns (ProductResponse);
+    rpc GetProductsByIds(ProductsRequest) returns (ProductsResponse); // New batch fetch method
 }
 
-// The request message containing the product ID
 message ProductRequest {
-    string id = 1; // Product ID
+    string id = 1; // Single Product ID
 }
 
-// The response message containing product details
 message ProductResponse {
     string id = 1;
     string productName = 2;
     string productDescription = 3;
     string pictureLocation = 4;
-    int32 unitWeight = 5;
-    int32 unitPrice = 6;
+    double unitWeight = 5;
+    double unitPrice = 6;
     int32 availableQuantity = 7;
+}
+
+message ProductsRequest {
+    repeated string ids = 1; // List of Product IDs
+}
+
+message ProductsResponse {
+    repeated ProductResponse products = 1; // List of Product Details
 }

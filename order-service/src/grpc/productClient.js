@@ -18,6 +18,7 @@ const getProductById = (productId) => {
     return new Promise((resolve, reject) => {
         productClient.GetProductById({ id: productId }, (err, response) => {
             if (err) {
+                console.log("error",err);
                 return reject(err);
             }
             resolve(response);
@@ -25,6 +26,18 @@ const getProductById = (productId) => {
     });
 };
 
+const getProductsByIds = (productIds) => {
+    return new Promise((resolve, reject) => {
+        productClient.GetProductsByIds({ ids: productIds }, (err, response) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(response.products); // Array of product details
+        });
+    });
+};
+
 module.exports = {
     getProductById,
+    getProductsByIds
 };
