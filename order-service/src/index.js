@@ -16,7 +16,7 @@ connectDB();
 
 // Other middlewares and routes setup here
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3005;
 
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);

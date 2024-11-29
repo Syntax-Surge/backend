@@ -1,24 +1,27 @@
 {
-  "name": "product-service",
+  "name": "checkout-service",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node src/index.js",
+    "dev": "nodemon src/index.js"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "amqplib": "^0.10.5",
     "axios": "^1.7.7",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "nodemon": "^3.1.7",
     "sequelize": "^6.37.5",
-    "tedious": "^18.6.1"
+    "stripe": "^17.3.1",
+    "tedious": "^18.6.1",
+    "uuid": "^11.0.3"
   }
 }

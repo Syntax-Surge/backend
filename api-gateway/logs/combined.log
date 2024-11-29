@@ -1,0 +1,12 @@
+2024-11-23T10:24:44.103Z [[32minfo[39m]: API Gateway running on port 3002
+2024-11-23T10:33:47.978Z [[32minfo[39m]: API Gateway running on port 3002
+2024-11-23T10:33:53.169Z [[32minfo[39m]: Request - Method: GET, URL: /, IP: ::1
+2024-11-23T10:33:53.185Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
+2024-11-23T10:44:37.662Z [[32minfo[39m]: API Gateway running on port 3002
+2024-11-23T10:44:44.515Z [[32minfo[39m]: Request - Method: GET, URL: /api/products, IP: ::1
+2024-11-23T10:44:44.551Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
+2024-11-23T10:58:54.968Z [[32minfo[39m]: Request - Method: GET, URL: /api/products, IP: ::1
+2024-11-23T10:58:55.141Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
+2024-11-23T11:04:02.044Z [[32minfo[39m]: API Gateway running on port 3002
+2024-11-23T11:04:30.103Z [[32minfo[39m]: Request - Method: GET, URL: /api/products, IP: ::1
+2024-11-23T11:04:30.145Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
