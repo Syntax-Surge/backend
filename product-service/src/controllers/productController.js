@@ -2,11 +2,10 @@ const asyncHandler = require("express-async-handler");
 const { Product } = require("../config/db");
 const cloudinary = require('../config/cloudinaryConfig');
 
-const getProducts = asyncHandler(async (req, res) => { 
-    console.log("Get Products");   
+const getProducts = asyncHandler(async (req, res) => {
     const page = req.query.page;
     const limit = 8;
-    console.log("get Customer",page,limit);
+    console.log("get products",page,limit);
     let offset = limit * (page - 1)
     try {
         const products = await Product.findAndCountAll({
@@ -67,9 +66,12 @@ const updateProduct = asyncHandler(async (req, res) => {
             res.status(404).send({ message: `Cannot find the Product with id ${id}` });
             return;
         }
-        
-        // Delete the old image if it exists
-        if (existingProduct.pictureLocation) {
+
+        console.log("existingProduct picture", existingProduct.pictureLocation)
+        console.log("new picture", pictureLocation)
+
+        // Delete the old image if new image is different.
+        if (pictureLocation != existingProduct.pictureLocation ) {
             const imageUrl = existingProduct.pictureLocation;
             
             // Use regex to extract the public ID from the URL

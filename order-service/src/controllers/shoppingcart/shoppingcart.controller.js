@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const { ShoppingCart } = require("../../config/db.js");
+const { getProductsByIds, getProductById } = require("../../grpc/productClient.js")
 
 // Add to Cart
 const addToCart = asyncHandler(async (req, res) => {
@@ -76,13 +77,7 @@ const getCart = asyncHandler(async (req, res) => {
 
   try {
     const cartItems = await ShoppingCart.findAll({
-      where: { userId },
-      // include: [
-      //   {
-      //     model: Product, // Assuming you have a Product model
-      //     attributes: ["id", "name", "price", "image"], // Select only required fields
-      //   },
-      // ],
+      where: { userId },        
     });
 
     if (!cartItems.length) {
@@ -90,7 +85,21 @@ const getCart = asyncHandler(async (req, res) => {
       return;
     }
 
-    res.status(200).json(cartItems);
+    // Fetch product details for each cart item
+    const cartItemsWithProductDetails = await Promise.all(
+      cartItems.map(async (item) => {
+        try {
+          const product = await getProductById(item.productId); // gRPC call
+          return { ...item.toJSON(), product }; // Combine cart item with product details
+        } catch (error) {
+          console.error(`Failed to fetch product details for productId ${item.productId}:`, error.message);
+          return { ...item.toJSON(), product: null }; // Return null product details on failure
+        }
+      })
+    );
+
+    res.status(200).json(cartItemsWithProductDetails);
+
   } catch (error) {
     res.status(500);
     throw new Error(error.message || "Error fetching cart items.");

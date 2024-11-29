@@ -1,7 +1,6 @@
-// db.js
-const { Sequelize } = require("sequelize");
-const { SequelizeMethod } = require("sequelize/lib/utils");
-require("dotenv").config();
+const { Sequelize } = require('sequelize');
+const { SequelizeMethod } = require('sequelize/lib/utils');
+require('dotenv').config();
 
 const server = process.env.SQL_SERVER;
 const database = process.env.SQL_DATABASE;
@@ -38,13 +37,22 @@ const connectDB = async () => {
   }
 };
 
-const Category = require("../models/category.model")(sequelize, Sequelize);
-const Product = require("../models/product.model")(sequelize, SequelizeMethod);
+const Category = require('../models/category.model')(sequelize, Sequelize)
+const Product = require("../models/product.model")(sequelize, SequelizeMethod)
+const Review = require("../models/review.model")(sequelize, SequelizeMethod)
+
+Product.hasMany(Review, { foreignKey: 'productId' });
+Review.belongsTo(Product, { foreignKey: 'productId' });
+
+Category.hasMany(Product, { foreignKey: 'categoryId' });
+Product.belongsTo(Category, { foreignKey: 'categoryId' });
+
 const db = {
   sequelize,
   Sequelize,
   Category,
   Product,
+  Review,
   connectDB,
 };
 module.exports = db;
