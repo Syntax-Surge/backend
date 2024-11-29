@@ -33,9 +33,11 @@ app.use((req, res, next) => {
 //     next();
 // });
 
+
 const PRODUCTS_SERVICE = 'http://localhost:3004';
 const CHECKOUT_SERVICE = 'http://localhost:3003';
 const PAYMENTS_SERVICE = 'http://localhost:8003';
+
 
 // load balancing
 // const productsServices = ['http://localhost:3004', 'http://localhost:3005', 'http://localhost:3006'];
@@ -64,8 +66,10 @@ const limiter = rateLimit({
 
 
 app.use('/api/products',limiter, createProxyMiddleware({ target: PRODUCTS_SERVICE, changeOrigin: true }));
+
 app.use('/api/checkouts',limiter, createProxyMiddleware({ target: CHECKOUT_SERVICE, changeOrigin: true }));
 app.use('/api/payments',limiter, createProxyMiddleware({ target: PAYMENTS_SERVICE, changeOrigin: true }));
+
 
 
 app.get('/', (req,res)=>{
@@ -82,4 +86,6 @@ app.use((err, req, res, next) => {
 
 app.listen(3002, () => {
     logger.info(`API Gateway running on port 3002`);
+
 });
+
