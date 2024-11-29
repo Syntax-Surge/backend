@@ -65,6 +65,38 @@ const removeCart = asyncHandler(async (req, res) => {
   }
 });
 
+// // Get Cart
+// const getCart = asyncHandler(async (req, res) => {
+//   const { userId } = req.params;
+
+//   if (!userId) {
+//     res.status(400).json({ message: "Missing user ID!" });
+//     return;
+//   }
+
+//   try {
+//     const cartItems = await ShoppingCart.findAll({
+//       where: { userId },
+//       // include: [
+//       //   {
+//       //     model: Product, // Assuming you have a Product model
+//       //     attributes: ["id", "name", "price", "image"], // Select only required fields
+//       //   },
+//       // ],
+//     });
+
+//     if (!cartItems.length) {
+//       res.status(404).json({ message: "No items in the cart!" });
+//       return;
+//     }
+
+//     res.status(200).json(cartItems);
+//   } catch (error) {
+//     res.status(500);
+//     throw new Error(error.message || "Error fetching cart items.");
+//   }
+// });
+
 // Get Cart
 const getCart = asyncHandler(async (req, res) => {
   const { userId } = req.params;
@@ -77,12 +109,6 @@ const getCart = asyncHandler(async (req, res) => {
   try {
     const cartItems = await ShoppingCart.findAll({
       where: { userId },
-      // include: [
-      //   {
-      //     model: Product, // Assuming you have a Product model
-      //     attributes: ["id", "name", "price", "image"], // Select only required fields
-      //   },
-      // ],
     });
 
     if (!cartItems.length) {
@@ -90,7 +116,23 @@ const getCart = asyncHandler(async (req, res) => {
       return;
     }
 
-    res.status(200).json(cartItems);
+    // Fetch product details for each cart item
+    const cartItemsWithProductDetails = await Promise.all(
+      cartItems.map(async (item) => {
+        try {
+          const product = await getProductById(item.productId); // gRPC call
+          return { ...item.toJSON(), product }; // Combine cart item with product details
+        } catch (error) {
+          console.error(
+            `Failed to fetch product details for productId ${item.productId}:`,
+            error.message
+          );
+          return { ...item.toJSON(), product: null }; // Return null product details on failure
+        }
+      })
+    );
+
+    res.status(200).json(cartItemsWithProductDetails);
   } catch (error) {
     res.status(500);
     throw new Error(error.message || "Error fetching cart items.");
