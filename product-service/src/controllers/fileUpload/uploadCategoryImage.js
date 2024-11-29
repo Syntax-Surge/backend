@@ -16,7 +16,7 @@ const upload = multer({ storage });
 
 const uploadCategoryImage = async(req, res) => {
   const imageUrls = [];
-  console.log('Uploading category image', req)
+  console.log('Uploading category image', req.file )
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded!' });
   }

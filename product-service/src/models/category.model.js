@@ -1,4 +1,4 @@
-const { DataTypes, Model, Sequelize } = require('sequelize');
+const { DataTypes, Model, Sequelize } = require("sequelize");
 
 module.exports = (sequelize,Sequelize) => {
     const Category = sequelize.define('Category',
@@ -40,7 +40,7 @@ module.exports = (sequelize,Sequelize) => {
                 }
             });
 
-                // Define associations for self-referential relationship
+    // Define associations for self-referential relationship
     Category.hasMany(Category, {
         foreignKey: 'parent_id',
         as: 'subcategories', // Alias for subcategories

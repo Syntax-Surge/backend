@@ -120,8 +120,8 @@ const updateCategory = asyncHandler(async (req, res) => {
                 return;
             }
 
-            // Delete the old image if it exists
-            if (existingCategory.image) {
+            // Delete the old image if new image is different.
+            if (image != existingCategory.image ) {
                 const imageUrl = existingCategory.image;
                 
                 // Use regex to extract the public ID from the URL
