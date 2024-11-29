@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const { Product } = require('../config/db'); // Ensure `Product` and `User` are imported or defined correctly.
+// const { Product } = require('../config/db'); // Ensure `Product` and `User` are imported or defined correctly.
 
 module.exports = (sequelize) => {
     const Review = sequelize.define('Review', {
