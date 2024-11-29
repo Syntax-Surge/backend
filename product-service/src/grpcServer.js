@@ -9,7 +9,7 @@ const PROTO_PATH = path.join(__dirname, "grpc/product.proto");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {});
 const productProto = grpc.loadPackageDefinition(packageDefinition).product;
 
-// connectDB();
+connectDB();
 
 // Implement the GetProductById method
 const getProductById = async (call, callback) => {
