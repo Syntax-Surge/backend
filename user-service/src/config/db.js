@@ -39,4 +39,14 @@ const connectDB = async () => {
 };
 
 
-module.exports = { connectDB };
+const User = require('../model/user.model')(sequelize, Sequelize.DataTypes);
+
+const db = {
+  sequelize,
+  Sequelize,
+  User,
+  connectDB   
+};
+
+module.exports = db;
+// module.exports = { connectDB  , sequelize};
