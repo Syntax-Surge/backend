@@ -4,6 +4,7 @@ const cors = require('cors');
 const { connectDB } = require('./config/db');
 const db = require('./config/db');
 const categoryRoutes = require('./routes/categoryRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 const productOpRoutes = require('./routes/productOp routes/productOp.route');
 
 const app = express();
@@ -20,8 +21,8 @@ db.sequelize.sync().then(function(){
 
 // Other middlewares and routes setup here
 app.use('/api/v1/categories', categoryRoutes);
-
 app.use('/api/v1/products', productOpRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
 
 const PORT = process.env.PORT;
 

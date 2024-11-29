@@ -40,7 +40,7 @@ module.exports = (sequelize,Sequelize) => {
                 }
             });
 
-                // Define associations for self-referential relationship
+    // Define associations for self-referential relationship
     Category.hasMany(Category, {
         foreignKey: 'parent_id',
         as: 'subcategories', // Alias for subcategories
