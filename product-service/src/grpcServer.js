@@ -2,14 +2,14 @@ const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader");
 const path = require("path");
 const { Product } = require("./config/db");
-const { connectDB, sequelize } = require("./config/db");
+const { connectDB } = require("./config/db");
 
 // Load the proto file
 const PROTO_PATH = path.join(__dirname, "grpc/product.proto");
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {});
 const productProto = grpc.loadPackageDefinition(packageDefinition).product;
 
-connectDB();
+// connectDB();
 
 // Implement the GetProductById method
 const getProductById = async (call, callback) => {
@@ -91,6 +91,5 @@ server.bindAsync(
   grpc.ServerCredentials.createInsecure(),
   () => {
     console.log(`Product gRPC server running at :${PORT}`);
-    server.start();
   }
 );
