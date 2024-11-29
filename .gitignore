@@ -5,6 +5,3 @@ user-service/node_modules/
 product-service/node_modules/
 api-gateway/node_modules/
 
-order-service/.env
-user-service/.env
-product-service/.env
