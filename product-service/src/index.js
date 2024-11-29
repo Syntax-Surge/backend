@@ -26,6 +26,6 @@ app.use('/api/v1/reviews', reviewRoutes);
 
 const PORT = process.env.PORT;
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Service running on port ${PORT}`);
 });
