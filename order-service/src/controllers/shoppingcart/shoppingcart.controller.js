@@ -4,7 +4,6 @@ const { ShoppingCart } = require("../../config/db.js");
 // Add to Cart
 const addToCart = asyncHandler(async (req, res) => {
   const { userId, productId, quantity } = req.body;
-console.log("fkk",userId, productId, quantity);
 
   if (!userId || !productId || !quantity) {
     res.status(400).json({ message: "Missing required fields!" });
@@ -16,8 +15,7 @@ console.log("fkk",userId, productId, quantity);
     const existingCartItem = await ShoppingCart.findOne({
       where: { userId, productId },
     });
-    console.log("dddd",existingCartItem);
-    
+    // console.log("dddd", existingCartItem);
 
     if (existingCartItem) {
       // If exists, update the quantity

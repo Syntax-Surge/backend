@@ -1,14 +1,3 @@
-// const express = require("express");
-// const addToCart = require("../controllers/shoppingcart/shoppingcart.controller");
-
-// const cartRouter = express.Router();
-
-// cartRouter.post("/add", addToCart);
-// // cartRouter.post("/remove", removeFromCart);
-// // cartRouter.post("/get", getCart);
-
-// module.exports = cartRouter;
-
 const express = require("express");
 const {
   addToCart,
