@@ -23,7 +23,7 @@ const cartRouter = require("./routes/shoppingCart.route");
 // api endpoints
 app.use("/api/v1/cart/", cartRouter);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3005;
 
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);

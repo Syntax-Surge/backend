@@ -9,11 +9,14 @@ const productOpRoutes = require('./routes/productOp routes/productOp.route');
 
 const app = express();
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors()); 
 
+
 console.log("Line 15 called");
+
 // Initialize DB Connection
 
 db.sequelize.sync().then(function(){
@@ -27,11 +30,13 @@ app.get('/', (req,res)=>{
   
 });
 // Other middlewares and routes setup here
+
 app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/products', productOpRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
 
-const PORT = process.env.PORT;
+
+const PORT = process.env.PORT || 3004;
 
 
 app.listen(PORT, '0.0.0.0', () => {
