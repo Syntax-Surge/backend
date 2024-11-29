@@ -35,6 +35,7 @@ connectDB();
 
 // Other middlewares and routes setup here
 
+
 const PORT = process.env.PORT;
 db.sequelize.sync().then(function () {
   // app.listen(port, function () {
@@ -47,6 +48,7 @@ const authRoutes = require('./routes/auth routes/authRoutes');
 // const db = require('./model');
 
 app.use('/' , authRoutes)
+
 
 
 app.listen(PORT, () => {

@@ -1,5 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const { ShoppingCart } = require("../../config/db.js");
+const {
+  getProductsByIds,
+  getProductById,
+} = require("../../grpc/productClient.js");
 
 // Add to Cart
 const addToCart = asyncHandler(async (req, res) => {

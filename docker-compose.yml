@@ -1,0 +1,63 @@
+version: "3"
+services:
+
+  apigateway:
+    build:
+      dockerfile: Dockerfile
+      context: ./api-gateway
+    container_name: apigateway
+    ports:
+      - "3002:3002"
+    restart: always
+    depends_on:
+      - user
+      - product
+      - order
+    networks:
+      - microservices-network
+
+  user:
+    build:
+      dockerfile: Dockerfile
+      context: ./user-service
+    container_name: user
+    ports:
+      - "3003:3003"
+    restart: always
+    volumes:
+      - .:/app
+      - /app/user-service/node_modules
+    networks:
+      - microservices-network
+
+  product:
+    build:
+      dockerfile: Dockerfile
+      context: ./product-service
+    container_name: product
+    ports:
+      - "3004:3004"
+    restart: always
+    volumes:
+      - .:/app/
+      - /app/product-service/node_modules
+    networks:
+      - microservices-network
+
+  order:
+    build:
+      dockerfile: Dockerfile
+      context: ./order-service
+    container_name: order
+    ports:
+      - "3005:3005"
+    restart: always
+    volumes:
+      - .:/app/
+      - /app/order-service/node_modules
+    networks:
+      - microservices-network 
+
+networks:
+  microservices-network:
+    driver: bridge           
