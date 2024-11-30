@@ -75,8 +75,12 @@ db.sequelize.sync().then(function () {
 const paymentRoute=require("./routers/payment");
 // const orderConfirmationRoute=require("./routers/orderConfirmationRoute")
 
+const orderRoutes=require("./routers/orderRoutes");
+
 app.use('/api/payment', paymentRoute);
 // app.use('/api/orderConfirmation', orderConfirmationRoute);
+
+app.use('/api/v1/orders', orderRoutes);
 
 const PORT = process.env.PORT || 3006;
 
