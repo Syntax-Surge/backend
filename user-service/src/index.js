@@ -46,11 +46,23 @@ db.sequelize.sync().then(function () {
 
 
 const authRoutes = require('./routes/auth routes/authRoutes');
+const globalErrorHandler = require('./middlewares/globalErrorHandler');
+const apiErrorHandler = require('./middlewares/apiErrorHandler');
+// const { createError } = require('./controllers/userController');
 // const db = require('./model');
 
 app.use('/' , authRoutes)
 
 app.use('/api/v1/users', userRoutes);
+// app.use('/api/v1/error',apiErrorHandler, createError);
+
+
+
+// app.use(globalErrorHandler)
+// router.use(apiErrorHandler);
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);
