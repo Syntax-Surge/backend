@@ -58,9 +58,21 @@ const getSubCategories = asyncHandler(async (req, res) => {
             description: subCategory.description,
             image: subCategory.image
         }));
-        res.status(200).json(formattedSubCategories);
+
+        const categoriesWithProductCount = await Promise.all(
+            formattedSubCategories.map(async (subCategory) => {
+                const productCount = await Product.count({
+                    where: {
+                        categoryId: subCategory.id
+                    }
+                });
+                return { ...subCategory, count: productCount };
+            })
+        );
+
+        res.status(200).json(categoriesWithProductCount);
     } catch (error) {
-        res.status(400);
+        res.status(400)
         throw new Error(error.message || "Can't get Sub Categories");
     }
 })

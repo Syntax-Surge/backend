@@ -16,11 +16,10 @@ const client = new userProto.UserService(
 // gRPC call to get user by ID
 const getUserById = (id) => {
     return new Promise((resolve, reject) => {
-        console.error("Id", id);
         client.GetUserById({ id }, (error, response) => {
             if (error) {
-                console.error("Error");
-                reject(error);
+                console.error('Error fetching user by ID:', error.message);
+                return reject(error);
             } else {
                 resolve(response);
             }
