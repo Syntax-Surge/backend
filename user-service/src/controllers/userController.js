@@ -20,16 +20,45 @@ const getAllUsers = asyncHandler(async (req, res) => {
         }
     });
 
+    
+
+
+    const getAll = asyncHandler(async (req, res) => {
+        
+        try {
+            const users = await User.findAll({
+                attributes: ['firstName', 'lastName'],
+            });
+            res.status(200).json(users);
+        } catch (error) {
+            res.status(400);
+            throw new Error(error.message || "Can't get all users");
+        }
+    });
+
+    const getUserByID = asyncHandler(async (req, res) => {
+        const id = req.query.id;
+        try {
+            const user = await User.findByPk(id)
+            res.status(200).json(user);
+        } catch (error) {
+            res.status(400);
+            throw new Error(error.message || "Can't get user");
+        }
+    });
+
     const updateUser = asyncHandler(async (req, res) => {
-        const data = req.params.data;
+        
+        
+        const data = req.body;
         const id = req.query.id;
         console.log(data);
         console.log(id);
         let updateFields = {};
-        if (data.firstName) updateFields.firstName = data.firstName;
-        if (data.lastName) updateFields.lastName = data.lastName;
-        if (data.email) updateFields.email = data.email;
-        if (data.password) updateFields.password = data.password;
+        if (data.updateFirstName) updateFields.firstName = data.updateFirstName;
+        if (data.updateLastName) updateFields.lastName = data.updateLastName;
+        if (data.updateEmail) updateFields.email = data.updateEmail;
+        if (data.updateNewPassword) updateFields.password = data.updateNewPassword;
         if (data.contactNo) updateFields.contactNo = data.contactNo;
         if (data.profileImage) updateFields.profileImage = data.profileImage;
         try {
@@ -101,17 +130,17 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
 
     const updateBillingAddress = asyncHandler(async (req, res) => {
-        const data = req.params.data;
+        const data = req.body;
         const id = req.query.id;
         console.log(data);
         console.log(id);
         let billingAddress = {};
-        if (data.line1) updateFields.billingAddressLine1 = data.line1;
-        if (data.line2) updateFields.billingAddressLine2 = data.line2;
-        if (data.city) updateFields.billingCity = data.city;
-        if (data.state) updateFields.billingState = data.state;
-        if (data.postalCode) updateFields.billingPostalCode = data.postalCode;
-        if (data.country) updateFields.billingCountry = data.country;
+        if (data.line1) billingAddress.billingAddressLine1 = data.line1;
+        if (data.line2) billingAddress.billingAddressLine2 = data.line2;
+        if (data.city) billingAddress.billingCity = data.city;
+        if (data.state) billingAddress.billingState = data.state;
+        if (data.postalCode) billingAddress.billingPostalCode = data.postalCode;
+        if (data.country) billingAddress.billingCountry = data.country;
         try {
             const users = await User.update(
                 billingAddress            
@@ -128,17 +157,17 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
 
     const updateShippingAddress = asyncHandler(async (req, res) => {
-        const data = req.params.data;
+        const data = req.body;
         const id = req.query.id;
         console.log(data);
         console.log(id);
         let shippingAddress = {};
-        if (data.line1) updateFields.shippingAddressLine1 = data.line1;
-        if (data.line2) updateFields.shippingAddressLine2 = data.line2;
-        if (data.city) updateFields.shippingCity = data.city;
-        if (data.state) updateFields.shippingState = data.state;
-        if (data.postalCode) updateFields.shippingPostalCode = data.postalCode;
-        if (data.country) updateFields.shippingCountry = data.country;
+        if (data.line1) shippingAddress.shippingAddressLine1 = data.line1;
+        if (data.line2) shippingAddress.shippingAddressLine2 = data.line2;
+        if (data.city) shippingAddress.shippingCity = data.city;
+        if (data.state) shippingAddress.shippingState = data.state;
+        if (data.postalCode) shippingAddress.shippingPostalCode = data.postalCode;
+        if (data.country) shippingAddress.shippingCountry = data.country;
         try {
             const users = await User.update(
                 shippingAddress            
@@ -164,7 +193,7 @@ const createError = asyncHandler(async (req, res) => {
     
 });
 
-module.exports = { getAllUsers, createError, updateUser };
+module.exports = { getAllUsers, createError, updateUser, getUserByID, getAll, updateBillingAddress, updateShippingAddress };
 
 
 
