@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler")
-const {Category} = require("../config/db");
+const {Category, Product} = require("../config/db");
 const { Op } = require('sequelize');
 const cloudinary = require('../config/cloudinaryConfig');
 
@@ -172,6 +172,17 @@ const deleteCategory = asyncHandler(async (req, res) => {
 
         if (!existingCategory) {
             res.status(404).send({ message: `Cannot find the Category ${id}` });
+            return;
+        }
+
+        const products = await Product.findAll({ where: { categoryId: id } });
+
+        if (products.length > 0) {
+            
+            console.log("hello") // Check if the array has any products
+            res.status(400).send({
+                message: `Cannot delete the category. There are ${products.length} products related to this category.`
+            });
             return;
         }
 

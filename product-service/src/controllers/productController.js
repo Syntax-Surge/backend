@@ -208,7 +208,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
     }
 
     // Delete the old image if it exists
-    if (existingProduct.pictureLocation && existingProduct.pictureLocation != pictureLocation) {
+    if (existingProduct.pictureLocation) {
       const imageUrl = existingProduct.pictureLocation;
 
       // Use regex to extract the public ID from the URL
