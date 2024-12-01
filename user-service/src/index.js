@@ -8,6 +8,7 @@ const passport = require('passport');
 // const db = require("../src/model/user.model")(sequelize , sequelize.Sequelize);
 var session = require('express-session');
 const db = require('./config/db');
+const userRoutes = require('./routes/userRoutes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -49,7 +50,7 @@ const authRoutes = require('./routes/auth routes/authRoutes');
 
 app.use('/' , authRoutes)
 
-
+app.use('/api/v1/users', userRoutes);
 
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);

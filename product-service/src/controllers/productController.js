@@ -132,7 +132,7 @@ const updateProduct = asyncHandler(async (req, res) => {
         console.log("new picture", pictureLocation)
 
         // Delete the old image if new image is different.
-        if (pictureLocation != existingProduct.pictureLocation ) {
+        if (existingProduct.pictureLocation && pictureLocation != existingProduct.pictureLocation ) {
             const imageUrl = existingProduct.pictureLocation;
             
             // Use regex to extract the public ID from the URL
