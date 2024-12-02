@@ -71,6 +71,8 @@ db.sequelize.sync().then(function () {
 const paymentRoute=require("./routes/payment");
 // const orderConfirmationRoute=require("./routers/orderConfirmationRoute")
 
+const orderRoutes=require("./routers/orderRoutes");
+
 app.use('/api/payment', paymentRoute);
 // app.use('/api/orderConfirmation', orderConfirmationRoute);
 
@@ -78,6 +80,9 @@ const cartRouter = require("./routes/shoppingCart.route");
 
 // api endpoints
 app.use("/api/cart/", cartRouter);
+
+app.use('/api/v1/orders', orderRoutes);
+
 
 const PORT = process.env.PORT || 3006;
 

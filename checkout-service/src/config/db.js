@@ -33,6 +33,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
@@ -71,5 +72,6 @@ db.orders = orders;
 db.orderItems = orderItems;
 db.payments = payments;
 db.ShoppingCart=ShoppingCart
+db.connectDB = connectDB;
 
 module.exports = db;
