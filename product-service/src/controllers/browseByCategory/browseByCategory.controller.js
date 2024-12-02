@@ -19,7 +19,7 @@ const browseByCategory = async (req, res) => {
         }
 
         const products = await Product.findAll({
-            where: { id: parseInt(id) },
+            where: { categoryId: parseInt(id) },
             include: [
                 {
                     model: Category,
