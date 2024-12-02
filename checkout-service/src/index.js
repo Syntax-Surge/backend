@@ -18,10 +18,6 @@ app.use(cors());
 
     publishToQueue("product","minaus one")
 
-    // // Example: Consume messages from the queue on startup
-    // await consumeFromQueue(process.env.QUEUE_NAME, (message) => {
-    //   console.log(`Received message: ${message}`);
-    // });
   } catch (error) {
     console.error('Failed to initialize RabbitMQ:', error.message);
     process.exit(1); // Exit if RabbitMQ fails
@@ -72,11 +68,16 @@ db.sequelize.sync().then(function () {
 
 
 //routes
-const paymentRoute=require("./routers/payment");
+const paymentRoute=require("./routes/payment");
 // const orderConfirmationRoute=require("./routers/orderConfirmationRoute")
 
 app.use('/api/payment', paymentRoute);
 // app.use('/api/orderConfirmation', orderConfirmationRoute);
+
+const cartRouter = require("./routes/shoppingCart.route");
+
+// api endpoints
+app.use("/api/cart/", cartRouter);
 
 const PORT = process.env.PORT || 3006;
 
