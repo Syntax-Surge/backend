@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler")
 // const { User } = require("../config/db");
 const db  = require("../config/db")
 const { where } = require("sequelize");
-const {getOrderItemsById} = require("../grpc/orderClient")
+const {getOrderItemsById, getAllOrderItems} = require("../grpc/orderClient")
 
 const User=db.users;
 const Address=db.Address;
@@ -235,6 +235,17 @@ const getUserOrder = async (req, res) => {
     }
 };
 
+const getAllUserOrder = async (req, res) => {
+
+    try {
+        const orderItem = await getAllOrderItems(); // Call gRPC function
+        res.json(orderItem); // Send the gRPC response as JSON
+    } catch (error) {
+        console.error("Error calling getOrderItemsById:", error);
+        res.status(500).json({ error: error.details || "Internal server error" });
+    }
+};
+
 const getAddressByID = asyncHandler(async (req, res) => {
     const id = req.query.id;
     try {
@@ -261,7 +272,7 @@ const createError = asyncHandler(async (req, res) => {
 
 });
 
-module.exports = { getAllUsers, createError, updateUser, getUserByID, getAll, createShippingAddress, updateShippingAddress, getUserOrder, getAddressByID };
+module.exports = { getAllUsers, createError, updateUser, getUserByID, getAll, createShippingAddress, updateShippingAddress, getUserOrder, getAddressByID, getAllUserOrder };
 
 
 

@@ -4,6 +4,7 @@ package orderItems;
 
 service UserService {
   rpc GetOrderItemsById (UserRequest) returns (UserResponse);
+  rpc GetAllOrderItems (UserRequest) returns (UserResponse);
 }
 
 message UserRequest {
