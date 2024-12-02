@@ -9,9 +9,9 @@ const router = express.Router();
 
 router.get('/search',search);
 router.get('/filter',filter);
-router.get('/' , getProducts)
-router.get('/:id' , getProduct)
-router.post('/' , createProduct)
+router.get('/' , getProducts);
+router.get('/:id' , getProduct);
+router.post('/' , createProduct);
 router.put('/:id' , updateProduct);
 router.delete('/:id', deleteProduct);
 // tempory
