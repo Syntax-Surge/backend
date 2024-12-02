@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { getAllUsers, createError, getUserByID, getAll, updateUser, updateShippingAddress, getUserOrder, getAddressByID, createShippingAddress } = require("../controllers/userController");
+const { getAllUsers, createError, getUserByID, getAll, updateUser, updateShippingAddress, getUserOrder, getAddressByID, createShippingAddress, updateUserProfile } = require("../controllers/userController");
 const apiErrorHandler = require("../middlewares/apiErrorHandler");
+const { uploadProfileImage, upload } = require("../controllers/fileUpload/uploadProfileImages");
 
 // router.get('/' , getAllUsers)
 router.get('/getAllUsers' , getAllUsers);
@@ -14,6 +15,11 @@ router.post('/createAddress', createShippingAddress);
 // router.put('/updatebilling', updateBillingAddress);
 router.get('/getOrders', getUserOrder); 
 router.get('/getAddressById', getAddressByID); 
+
+
+// router.post('/uploadProfileImage', uploadProfileImage);
+router.post('/uploadProfileImage', upload.single('image'), uploadProfileImage);
+router.post('/updateUserProfile', updateUserProfile);
 
 
 router.use(apiErrorHandler);
