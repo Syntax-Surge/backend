@@ -3,6 +3,7 @@ require('dotenv').config();
 const cors = require('cors');
 const { connectDB , sequelize } = require('./config/db');
 // const sequelize = require('sequelize')
+const bcrypt = require('bcrypt');
 const app = express();
 const passport = require('passport');
 // const db = require("../src/model/user.model")(sequelize , sequelize.Sequelize);
@@ -44,9 +45,20 @@ db.sequelize.sync().then(function () {
 
 
 const authRoutes = require('./routes/auth routes/authRoutes');
+const adminRoutes = require('./routes/auth routes/adminAuthRoutes');
 // const db = require('./model');
 
 app.use('/' , authRoutes)
+app.use('/admin' , adminRoutes)
+
+const hashedPaswrd = async() => {
+
+
+  const saltRounds = parseInt(process.env.SALT_ROUNDS) || 12;
+  const hashedPassword =await  bcrypt.hash("12341234", saltRounds);
+  console.log('hashedPassword :', hashedPassword )
+}
+// hashedPaswrd();
 
 
 app.listen(PORT, () => {

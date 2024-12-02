@@ -109,6 +109,7 @@ passport.use(
 passport.use(new LocalStrategy(
   async function (email, password, cb) {
     try {
+      console.log('Came hereeeeeeeeeeeeeeee user strat')
       console.log("email",email);
       
       const user = await User.findOne({ where: { email } });
@@ -118,7 +119,7 @@ passport.use(new LocalStrategy(
 
       const isMatched = await bcrypt.compare(password, user.password);
       if (!isMatched) return cb(null, false, { message: 'Incorrect password' });
-      user.role="user"
+      user.role="user";
       const { password: _, ...userData } = user;
       return cb(null, userData);
     } catch (err) {

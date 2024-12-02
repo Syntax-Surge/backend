@@ -40,11 +40,13 @@ const connectDB = async () => {
 
 
 const User = require('../model/user.model')(sequelize, Sequelize.DataTypes);
+const Admin = require('../model/admin')(sequelize, Sequelize.DataTypes);
 
 const db = {
   sequelize,
   Sequelize,
   User,
+  Admin,
   connectDB   
 };
 
