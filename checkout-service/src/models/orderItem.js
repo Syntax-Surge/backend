@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BIGINT,
         allowNull: false,
         // references: {
-        //   model: 'Orders',
+        //   model: 'Products',
         //   key: 'id',
         // },
       },

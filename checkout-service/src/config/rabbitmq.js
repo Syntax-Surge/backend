@@ -14,8 +14,27 @@ async function connectRabbitMQ() {
     connection = await amqp.connect(process.env.MSG_QUEUE_URL);
     console.log('Connected to RabbitMQ');
 
+    connection.on('error', (err) => {
+      console.error('RabbitMQ connection error:', err.message);
+    });
+
+    connection.on('close', () => {
+      console.error('RabbitMQ connection closed.'); // Attempt to reconnect
+    });
+
+
+
     // Create a channel
     channel = await connection.createChannel();
+
+    channel.on('error', (err) => {
+      console.error('RabbitMQ channel error:', err.message);
+    });
+
+    channel.on('close', () => {
+      console.error('RabbitMQ channel closed.');
+    });
+    
     console.log('RabbitMQ channel created');
   } catch (error) {
     console.error('Error connecting to RabbitMQ:', error.message);

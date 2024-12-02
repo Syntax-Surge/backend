@@ -33,6 +33,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
@@ -55,6 +56,11 @@ const payments = require('../models/payment')(
   Sequelize
 );
 
+const ShoppingCart = require("../models/shoppingcart.module")(
+  sequelize,
+  Sequelize
+);
+
 orders.hasMany(orderItems, { foreignKey: 'orderId', as: 'items' });
 orderItems.belongsTo(orders, { foreignKey: 'orderId' });
 
@@ -65,5 +71,7 @@ payments.belongsTo(orders, { foreignKey: 'orderId' });
 db.orders = orders;
 db.orderItems = orderItems;
 db.payments = payments;
+db.ShoppingCart=ShoppingCart
+db.connectDB = connectDB;
 
 module.exports = db;
