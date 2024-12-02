@@ -23,53 +23,53 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: true,
     },
-    billingAddressLine1: {
-      type: Sequelize.STRING,
-      llowNull: true,
-    },
-    billingAddressLine2: {
-      type: Sequelize.STRING,
-      llowNull: true,
-    },
-    billingCity: {
-      type: Sequelize.STRING,
-      llowNull: true,
-    },
-    billingState: {
-      type: Sequelize.STRING,
-      llowNull: true,
-    },
-    billingPostalCode: {
-      type: Sequelize.STRING,
-      llowNull: true,
-    },
-    billingCountry: {
-      type: Sequelize.STRING,
-      llowNull: true,
-    },
+    // billingAddressLine1: {
+    //   type: Sequelize.STRING,
+    //   allowNull: true,
+    // },
+    // billingAddressLine2: {
+    //   type: Sequelize.STRING,
+    //   allowNull: true,
+    // },
+    // billingCity: {
+    //   type: Sequelize.STRING,
+    //   allowNull: true,
+    // },
+    // billingState: {
+    //   type: Sequelize.STRING,
+    //   allowNull: true,
+    // },
+    // billingPostalCode: {
+    //   type: Sequelize.STRING,
+    //   allowNull: true,
+    // },
+    // billingCountry: {
+    //   type: Sequelize.STRING,
+    //   allowNull: true,
+    // },
     shippingAddressLine1: {
       type: Sequelize.STRING,
-      llowNull: true,
+      allowNull: true,
     },
     shippingAddressLine2: {
       type: Sequelize.STRING,
-      llowNull: true,
+      allowNull: true,
     },
     shippingCity: {
       type: Sequelize.STRING,
-      llowNull: true,
+      allowNull: true,
     },
     shippingState: {
       type: Sequelize.STRING,
-      llowNull: true,
+      allowNull: true,
     },
     shippingPostalCode: {
       type: Sequelize.STRING,
-      llowNull: true,
+      allowNull: true,
     },
     shippingCountry: {
       type: Sequelize.STRING,
-      llowNull: true,
+      allowNull: true,
     },
   });
   // User.associate = function (models) {

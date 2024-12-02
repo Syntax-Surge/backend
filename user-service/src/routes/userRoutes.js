@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { getAllUsers, createError, getUserByID, getAll, updateUser, updateShippingAddress, updateBillingAddress } = require("../controllers/userController");
+const { getAllUsers, createError, getUserByID, getAll, updateUser, updateShippingAddress, getUserOrder, getAddressByID, createShippingAddress } = require("../controllers/userController");
 const apiErrorHandler = require("../middlewares/apiErrorHandler");
 
 // router.get('/' , getAllUsers)
@@ -10,7 +10,10 @@ router.get('/getUserByID' , getUserByID);
 router.get('/getAll', getAll);
 router.post('/updateUser', updateUser);
 router.put('/updateshipping', updateShippingAddress);
-router.put('/updatebilling', updateBillingAddress);
+router.post('/createAddress', createShippingAddress);
+// router.put('/updatebilling', updateBillingAddress);
+router.get('/getOrders', getUserOrder); 
+router.get('/getAddressById', getAddressByID); 
 
 
 router.use(apiErrorHandler);
