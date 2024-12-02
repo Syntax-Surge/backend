@@ -33,6 +33,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
@@ -65,5 +66,6 @@ payments.belongsTo(orders, { foreignKey: 'orderId' });
 db.orders = orders;
 db.orderItems = orderItems;
 db.payments = payments;
+db.connectDB = connectDB;
 
 module.exports = db;
