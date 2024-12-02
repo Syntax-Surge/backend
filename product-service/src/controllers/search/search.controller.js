@@ -7,7 +7,10 @@ const search = async (req,res) => {
     try {
         const { keyword, limit = 10, offset = 0 } = req.query;
         console.log("Function called",keyword,limit,offset);
-        
+        if(!keyword){
+            console.log("Error",error);
+            res.status(404).json({message:"Please enter a key word"});
+        }
         const product = await Product.findAll({
             where: {
                 [Op.or]:[
