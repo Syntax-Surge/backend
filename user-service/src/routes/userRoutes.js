@@ -3,6 +3,8 @@ const router = express.Router();
 const { getAllUsers, createError, getUserByID, getAll, updateUser, updateShippingAddress, updateBillingAddress } = require("../controllers/userController");
 const apiErrorHandler = require("../middlewares/apiErrorHandler");
 
+console.log('routes');
+
 // router.get('/' , getAllUsers)
 router.get('/getAllUsers' , getAllUsers);
 // router.get('/createError', createError);

@@ -5,7 +5,7 @@ const cloudinary = require('../config/cloudinaryConfig');
 const getProducts = asyncHandler(async (req, res) => {
     const page = req.query.page;
     const limit = 8;
-    console.log("get products",page,limit);
+    // console.log("get products",page,limit);
     let offset = limit * (page - 1)
     try {
         const products = await Product.findAndCountAll({
@@ -22,7 +22,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
 // get one product
 const getProduct = asyncHandler(async (req, res) => {
-  console.log('get one product');
+  // console.log('get one product');
 
   const id = req.params.id;
 

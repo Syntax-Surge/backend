@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-const { connectDB , sequelize } = require('./config/db');
+const { connectDB, sequelize } = require('./config/db');
 // const sequelize = require('sequelize')
 const app = express();
 const passport = require('passport');
@@ -12,30 +12,32 @@ const userRoutes = require('./routes/userRoutes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors()); 
+app.use(cors());
 
-app.use(express.urlencoded({ extended: true }));       //used to metion the ,ublic folder's directory to css in ejs files
+app.use(express.urlencoded({ extended: true })); //used to metion the ,ublic folder's directory to css in ejs files
 
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: false,
-//   store: new SQLiteStore({ db: 'sessions.db', dir: './var/db' }),
-  // store: MongoStore.create({
-  //   mongoUrl : process.env.MONGO_DB_URL
-  // }),
-  cookie : {                                                    //added by  me
-    secure : false,                                             //added by  me
-    expires : new Date(Date.now() + 10000),                     //added by  me
-    maxAge : 1000 * 60                                              //added by  me
-} ,
-})); 
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    //   store: new SQLiteStore({ db: 'sessions.db', dir: './var/db' }),
+    // store: MongoStore.create({
+    //   mongoUrl : process.env.MONGO_DB_URL
+    // }),
+    cookie: {
+      //added by  me
+      secure: false, //added by  me
+      expires: new Date(Date.now() + 10000), //added by  me
+      maxAge: 1000 * 60, //added by  me
+    },
+  })
+);
 app.use(passport.authenticate('session'));
 // Initialize DB Connection
 connectDB();
 
 // Other middlewares and routes setup here
-
 
 const PORT = process.env.PORT;
 db.sequelize.sync().then(function () {
@@ -44,25 +46,21 @@ db.sequelize.sync().then(function () {
   // });
 });
 
-
 const authRoutes = require('./routes/auth routes/authRoutes');
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
 const apiErrorHandler = require('./middlewares/apiErrorHandler');
 // const { createError } = require('./controllers/userController');
 // const db = require('./model');
 
-app.use('/' , authRoutes)
+app.use('/', authRoutes);
+
+console.log('index');
 
 app.use('/api/v1/users', userRoutes);
 // app.use('/api/v1/error',apiErrorHandler, createError);
 
-
-
 // app.use(globalErrorHandler)
 // router.use(apiErrorHandler);
-
-
-
 
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);
