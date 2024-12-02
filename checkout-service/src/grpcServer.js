@@ -56,6 +56,8 @@ const getOrderItemsById = async (call, callback) => {
         });
 
         const orderDataValues = order1.map(order => order.dataValues);
+        console.log(order1);
+        
 
 
         
