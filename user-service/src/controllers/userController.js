@@ -16,7 +16,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
     res.status(200).json(users);
   } catch (error) {
     res.status(400);
-    throw new Error(error.message || "Can't get all users");
+    throw new Error(error.message || "Can't get all users")
   }
 });
 
@@ -33,7 +33,11 @@ const getAll = asyncHandler(async (req, res) => {
 });
 
 const getUserByID = asyncHandler(async (req, res) => {
+    // console.log('get user by id called');
+    
   const id = req.query.id;
+//   console.log("user id",id);
+  
   try {
     const user = await User.findByPk(id);
     res.status(200).json(user);
