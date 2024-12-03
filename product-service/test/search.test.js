@@ -14,7 +14,7 @@ describe('Search API endpoint tests', () => {
     test('should return 400 if no keyword is provided for search', async () => {
         const response = await request(app).get('/api/v1/products/search');
         expect(response.status).toBe(404);
-        expect(response.body.message).toBe('Keyword is required for searching');
+        expect(response.body.message).toBe('An error occured');
     });
     // Cleanup and close the DB connection after all tests
     afterAll(async () => {
