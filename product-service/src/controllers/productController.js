@@ -231,10 +231,49 @@ const deleteProduct = asyncHandler(async (req, res) => {
   }
 });
 
+
+async function updateProduct_OrderItem(orderProducts) {
+  // Loop through each product in the array
+  for (const orderProduct of orderProducts) {
+    const { productId, quantity } = orderProduct;
+
+    try {
+      // Find the product by its ID
+      const product = await Product.findOne({ where: { id: productId } });
+
+      if (!product) {
+        console.log(`Product with ID ${productId} not found`);
+        continue;
+      }
+
+      // Check if enough quantity is available
+      if (product.availableQuantity < quantity) {
+        console.log(`Not enough quantity available for product ID ${productId}`);
+        continue;
+      }
+
+      // Calculate the new quantity after reducing
+      const updatedQuantity = product.availableQuantity - quantity;
+
+      // Update the product's available quantity
+      await Product.update(
+        { availableQuantity: updatedQuantity },
+        { where: { id: productId }, returning: true }
+      );
+
+      console.log(`Product with ID ${productId} updated. New quantity: ${updatedQuantity}`);
+
+    } catch (error) {
+      console.error(`Error updating product ${productId}:`, error.message);
+    }
+  }
+}
+
 module.exports = {
   getProducts,
   createProduct,
   updateProduct,
   deleteProduct,
   getProduct,
+  updateProduct_OrderItem
 };

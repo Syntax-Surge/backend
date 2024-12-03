@@ -87,7 +87,7 @@ server.addService(productProto.ProductService.service, {
  });
 
 const PORT = 50052; // gRPC server for Product microservice
-server.bindAsync(`0.0.0.0:${PORT}`, grpc.ServerCredentials.createInsecure(), () => {
+server.bindAsync(`127.0.0.1:${PORT}`, grpc.ServerCredentials.createInsecure(), () => {
     console.log(`Product gRPC server running at :${PORT}`);
     server.start();
 });
