@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const { Review, Product } = require("../config/db");
 const { getUserById } = require('../grpc/userClient');
+const { Op } = require('sequelize');
+
 
 const getReviews = asyncHandler(async (req, res) => { 
     const page = req.query.page || 1;
@@ -60,6 +62,32 @@ const createReview = asyncHandler(async (req, res) => {
     }
 });
 
+const getReviewsForUser = asyncHandler(async (req, res) => { 
+    const userId = req.query.userId;
+    const productId = req.query.productId;
+    // const page = req.query.page || 1;
+    // const limit = 8;
+    // console.log("get review",page,limit);
+    // let offset = limit * (page - 1)
+    try {
+        const reviews = await Review.findOne({
+            // limit: limit,
+            // offset: offset,
+            where: {
+                [Op.and]: [
+                    { userId: userId },
+                    { productId: productId }
+                ]
+            },
+            order: [['createdAt', 'DESC']],
+        });
+        res.status(200).json(reviews)
+    } catch (error) {
+        res.status(400);
+        throw new Error(error.message || "Can't get Reviews");
+    }
+});
 
 
-module.exports = { getReviews, createReview };
+
+module.exports = { getReviews, createReview, getReviewsForUser };
