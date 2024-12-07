@@ -67,3 +67,5 @@ app.use('/api/v1/users', userRoutes);
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);
 });
+
+module.exports = app;

@@ -5,16 +5,16 @@ const apiErrorHandler = require("../middlewares/apiErrorHandler");
 const { uploadProfileImage, upload } = require("../controllers/fileUpload/uploadProfileImages");
 
 // router.get('/' , getAllUsers)
-router.get('/getAllUsers' , getAllUsers);
+router.get('/getAllUsers' , getAllUsers);   //admin auth
 // router.get('/createError', createError);
-router.get('/getUserByID' , getUserByID);
-router.get('/getAll', getAll);
-router.post('/updateUser', updateUser);
-router.put('/updateshipping', updateShippingAddress);
-router.post('/createAddress', createShippingAddress);
+router.get('/getUserByID' , getUserByID);  //user
+router.get('/getAll', getAll);  //admin auth
+router.post('/updateUser', updateUser);  //user
+router.put('/updateshipping', updateShippingAddress);  //user
+router.post('/createAddress', createShippingAddress); //user
 // router.put('/updatebilling', updateBillingAddress);
 router.get('/getOrders', getUserOrder); 
-router.get('/getAddressById', getAddressByID); 
+router.get('/getAddressById', getAddressByID); //admin auth //user auth
 
 
 // router.post('/uploadProfileImage', uploadProfileImage);

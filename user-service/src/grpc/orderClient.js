@@ -9,7 +9,7 @@ const orderItemsProto = grpc.loadPackageDefinition(packageDefinition).orderItems
 
 // Create a client instance
 const client = new orderItemsProto.UserService(
-    'localhost:50057', 
+    'localhost:50053', 
     grpc.credentials.createInsecure()
 );
 

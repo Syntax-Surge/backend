@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler")
-const {Category} = require("../config/db");
+const {Category, Product} = require("../config/db");
 const { Op } = require('sequelize');
 const cloudinary = require('../config/cloudinaryConfig');
 
@@ -58,9 +58,21 @@ const getSubCategories = asyncHandler(async (req, res) => {
             description: subCategory.description,
             image: subCategory.image
         }));
-        res.status(200).json(formattedSubCategories);
+
+        const categoriesWithProductCount = await Promise.all(
+            formattedSubCategories.map(async (subCategory) => {
+                const productCount = await Product.count({
+                    where: {
+                        categoryId: subCategory.id
+                    }
+                });
+                return { ...subCategory, count: productCount };
+            })
+        );
+
+        res.status(200).json(categoriesWithProductCount);
     } catch (error) {
-        res.status(400);
+        res.status(400)
         throw new Error(error.message || "Can't get Sub Categories");
     }
 })
@@ -80,9 +92,25 @@ const createCategory = asyncHandler(async (req, res) => {
         }
 
         try {
-            const existingCategory = await Category.findOne({ where: { name: name } });
-
+            const existingCategory = await Category.findOne({ where: { name: name, parent_id: parentValue } });
+            
+            //check the category which has same category name in the db.
             if (existingCategory) {
+                // Delete the uploaded image .
+                if (image) {
+                    console.log("image deleting ")
+                    const imageUrl = image;
+                    
+                    // Use regex to extract the public ID from the URL
+                    const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)\.\w+$/); 
+                    const publicId = publicIdMatch ? publicIdMatch[1] : null;
+
+                    if (publicId) {
+                        await cloudinary.uploader.destroy(publicId);
+                    } else {
+                        console.warn("Unable to extract publicId from:", imageUrl);
+                    }
+                }
                 res.status(400).send({ message: "Category already exists." });
                 return;
             }
@@ -117,6 +145,29 @@ const updateCategory = asyncHandler(async (req, res) => {
 
             if (!existingCategory) {
                 res.status(404).send({ message: `Cannot find the Category ${id}` });
+                return;
+            }
+
+            const findAnotherCategoryByName = await Category.findOne({ where: { name: name } });
+
+            //check the category which has same category name in the db.
+            if(findAnotherCategoryByName && id != findAnotherCategoryByName?.id) {
+                //delete the uploaded image
+                if (image) {
+                    console.log("image deleting ")
+                    const imageUrl = image;
+                    
+                    // Use regex to extract the public ID from the URL
+                    const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)\.\w+$/); 
+                    const publicId = publicIdMatch ? publicIdMatch[1] : null;
+
+                    if (publicId) {
+                        await cloudinary.uploader.destroy(publicId);
+                    } else {
+                        console.warn("Unable to extract publicId from:", imageUrl);
+                    }
+                }
+                res.status(400).send({ message: "A category with this parent already exists" });
                 return;
             }
 
@@ -172,6 +223,18 @@ const deleteCategory = asyncHandler(async (req, res) => {
 
         if (!existingCategory) {
             res.status(404).send({ message: `Cannot find the Category ${id}` });
+            return;
+        }
+
+        //find the products which are relevant to this category
+        const products = await Product.findAll({ where: { categoryId: id } });
+
+        if (products.length > 0) {
+            
+            console.log("hello") // Check if the array has any products
+            res.status(400).send({
+                message: `Cannot delete the category. There are ${products.length} products related to this category.`
+            });
             return;
         }
 

@@ -66,6 +66,29 @@ const createProduct = asyncHandler(async (req, res) => {
   }
 
   try {
+    const existingProduct = await Product.findOne({ where: { productName: productName } });
+            
+    //check the category which has same category name in the db.
+    if (existingProduct) {
+        // Delete the uploaded image .
+        if (pictureLocation) {
+            console.log("image deleting ")
+            const imageUrl = pictureLocation;
+            
+            // Use regex to extract the public ID from the URL
+            const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)\.\w+$/); 
+            const publicId = publicIdMatch ? publicIdMatch[1] : null;
+
+            if (publicId) {
+                await cloudinary.uploader.destroy(publicId);
+            } else {
+                console.warn("Unable to extract publicId from:", imageUrl);
+            }
+        }
+        res.status(400).send({ message: "Product already exists." });
+        return;
+    }
+
     const product = {
       productName,
       productDescription,
@@ -78,8 +101,9 @@ const createProduct = asyncHandler(async (req, res) => {
 
     const data = await Product.create(product);
     res.status(201).json(data);
-  } catch (error) {
-    console.error('Error creating product:', error);
+  } 
+  catch (error) {
+    console.log('Error creating product:', error);
     res.status(500);
     throw new Error(
       error.message || 'Some error occurred while creating the Product.'
@@ -115,80 +139,72 @@ const updateProduct = asyncHandler(async (req, res) => {
     const existingProduct = await Product.findOne({ where: { id } });
 
     if (!existingProduct) {
-      res
-        .status(404)
-        .send({ message: `Cannot find the Product with id ${id}` });
+        res.status(404).send({ message: `Cannot find the Product with id ${id}` });
+        return;
+    }
+
+    const findAnotherProductByName = await Product.findOne({ where: { productName: productName } });
+            
+    //check the product which has same category name in the db.
+    if(findAnotherProductByName && id != findAnotherProductByName.id) {
+      //delete the uploaded image
+      if (pictureLocation) {
+          console.log("image deleting ")
+          const imageUrl = pictureLocation;
+          
+          // Use regex to extract the public ID from the URL
+          const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)\.\w+$/); 
+          const publicId = publicIdMatch ? publicIdMatch[1] : null;
+
+          if (publicId) {
+              await cloudinary.uploader.destroy(publicId);
+          } else {
+              console.warn("Unable to extract publicId from:", imageUrl);
+          }
+      }
+      res.status(400).send({ message: "This Product already exists." });
       return;
     }
-    try {
-        const existingProduct = await Product.findOne({ where: { id } });
 
-        if (!existingProduct) {
-            res.status(404).send({ message: `Cannot find the Product with id ${id}` });
-            return;
+    console.log("existingProduct picture", existingProduct.pictureLocation)
+    console.log("new picture", pictureLocation)
+
+    // Delete the old image if new image is different.
+    if (existingProduct.pictureLocation && pictureLocation != existingProduct.pictureLocation ) {
+        const imageUrl = existingProduct.pictureLocation;
+        
+        // Use regex to extract the public ID from the URL
+        const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)\.\w+$/); 
+        const publicId = publicIdMatch ? publicIdMatch[1] : null;
+
+        if (publicId) {
+            await cloudinary.uploader.destroy(publicId);
+        } else {
+            console.warn("Unable to extract publicId from:", imageUrl);
         }
-
-        console.log("existingProduct picture", existingProduct.pictureLocation)
-        console.log("new picture", pictureLocation)
-
-        // Delete the old image if new image is different.
-        if (existingProduct.pictureLocation && pictureLocation != existingProduct.pictureLocation ) {
-            const imageUrl = existingProduct.pictureLocation;
-            
-            // Use regex to extract the public ID from the URL
-            const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)\.\w+$/); 
-            const publicId = publicIdMatch ? publicIdMatch[1] : null;
-
-            if (publicId) {
-                await cloudinary.uploader.destroy(publicId);
-            } else {
-                console.warn("Unable to extract publicId from:", imageUrl);
-            }
-        }
-
-        const updatedProduct = {
-            productName,
-            productDescription,
-            pictureLocation,
-            unitWeight,
-            unitPrice,
-            availableQuantity,
-            categoryId
-        };
-
-        await Product.update(updatedProduct, {
-            where: { id },
-            returning: true,
-        });
-
-        res.status(200).json({ message: "Product updated successfully." });
-    } catch (error) {
-        console.error("Error updating product:", error);
-        res.status(500);
-        throw new Error(error.message || "Cannot update Product");
     }
 
     const updatedProduct = {
-      productName,
-      productDescription,
-      pictureLocation,
-      unitWeight,
-      unitPrice,
-      availableQuantity,
-      categoryId,
+        productName,
+        productDescription,
+        pictureLocation,
+        unitWeight,
+        unitPrice,
+        availableQuantity,
+        categoryId
     };
 
     await Product.update(updatedProduct, {
-      where: { id },
-      returning: true,
+        where: { id },
+        returning: true,
     });
 
-    res.status(200).json({ message: 'Product updated successfully.' });
-  } catch (error) {
-    console.error('Error updating product:', error);
+    res.status(200).json({ message: "Product updated successfully." });
+  }catch (error) {
+    console.error("Error updating product:", error);
     res.status(500);
-    throw new Error(error.message || 'Cannot update Product');
-  }
+    throw new Error(error.message || "Cannot update Product");
+}
 });
 
 const deleteProduct = asyncHandler(async (req, res) => {
@@ -208,7 +224,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
     }
 
     // Delete the old image if it exists
-    if (existingProduct.pictureLocation && existingProduct.pictureLocation != pictureLocation) {
+    if (existingProduct.pictureLocation) {
       const imageUrl = existingProduct.pictureLocation;
 
       // Use regex to extract the public ID from the URL
