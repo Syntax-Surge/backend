@@ -11,6 +11,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "api-gateway": "file:",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
@@ -19,6 +21,7 @@
     "http-proxy-middleware": "^3.0.3",
     "node-cache": "^5.1.2",
     "nodemon": "^3.1.7",
+    "redis": "^4.7.0",
     "winston": "^3.17.0"
   }
 }

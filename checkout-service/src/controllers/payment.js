@@ -1,15 +1,21 @@
 const db = require('../config/db');
 const crypto = require('crypto');
 const { publishToQueue } = require('../config/rabbitmq');
+const { Sequelize } = require('sequelize');
+const { getProductById } = require('../grpc/productClient');
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const asyncHandler = require("express-async-handler")
 
 const Orders = db.orders;
 const OrderItems = db.orderItems;
-const Payemnts = db.payments;
+const Payments = db.payments;
 
-exports.createPaymentIntent=async (req, res) => {
+exports.createPaymentIntent=asyncHandler(async (req, res) => {
     const { total, customer, shipping,items } = req.body;
+
     try {
+  
+      
     //   console.log("request",req.body.product,req.body.customer,req.body.shipping);
   
       if ( !total || !customer || !shipping) {
@@ -20,27 +26,57 @@ exports.createPaymentIntent=async (req, res) => {
         });
       }
 
+    
+
       console.log(customer, shipping);
-      
-      console.log("newOrder");
       const newOrder = await Orders.create({
         userId: customer.id,
+        firstName: shipping.firstName,
+        lastName: shipping.lastName || null,
         addressLine1: shipping.addressLine1,
         addressLine2: shipping.addressLine2 || null,
         city: shipping.city,
-        state: shipping.state,
         postalCode: shipping.postalCode,
-        country: shipping.country,
+        phone: shipping.phone,
+        note: shipping.note,
+        shippingMethod: shipping.shippingMethod,
+        status: shipping.status,
       });
-      console.log("newOrder");
-      const orderItems = items.map((item) => ({
-        orderId: newOrder.id,
-        productId: item.productId,
-        quantity: item.quantity || 1,
-      }));
       
-     
-      
+      console.log(items);
+      // const orderItems = items.map((item) => ({
+      //   orderId: newOrder.id,
+      //   productId: item.productId,
+      //   quantity: item.quantity || 1,
+      // }));
+
+      const orderItems = [];
+      for (const item of items) {
+        const product = await getProductById(item.productId); // Ensure this is an async function
+        if (!product) {
+          return res.status(404).json({
+            success: false,
+            message: `Product with ID ${item.productId} not found.`,
+          });
+        }
+      console.log(product);
+  
+        if (product.availableQuantity < item.quantity) {
+          return res.status(400).json({
+            success: false,
+            message: `Insufficient stock for product  ${product.productName}.`,
+          });
+        }
+  
+        orderItems.push({
+          orderId: newOrder.id,
+          productId: item.productId,
+          quantity: item.quantity || 1,
+        });
+  
+
+      }
+       
       // Bulk insert order items
       await OrderItems.bulkCreate(orderItems);
   
@@ -59,45 +95,130 @@ exports.createPaymentIntent=async (req, res) => {
         },
         { idempotencyKey } // Use idempotency key here
       );
-  
-      res.send({
+
+
+      res.status(201).send({
         clientSecret: paymentIntent.client_secret,
         orderId: newOrder.id,
       });
 
     } catch (e) {
-      return res.status(400).send({
-        error: {
-          message: e.message,
-        },
-      });
+ 
+    console.error("Order creation failed:", e);
+    res.status(500).json({
+      success: false,
+      message: "Order creation failed",
+      error: e.message,
+    });
     }
-  }
+  })
 
 
- exports.confirmPayment= async (req, res) => {
-    const { paymentIntent,orderId } = req.body;
+//  exports.confirmPayment= async (req, res) => {
+//     const { paymentIntent,orderId } = req.body;
 
-    console.log(paymentIntent);
+//     console.log(paymentIntent);
     
   
-    const PaymentIntent = await stripe.paymentIntents.retrieve(paymentIntent.id);
+//     const PaymentIntent = await stripe.paymentIntents.retrieve(paymentIntent.id);
   
-    if (PaymentIntent.status === 'succeeded') {
-        console.log("jjj");
+//     if (PaymentIntent.status === 'succeeded') {
+//       let transaction = await Sequelize.transaction();
+//         console.log("jjj");
         
-      const payment=await Payemnts.create({
-        paymentIntentId:PaymentIntent.id,
-        orderId: orderId,
-        paymentMethod:'credit_card',
-        paymentStatus:'success',
-        amount:PaymentIntent.amount
+//       const payment=await Payemnts.create({
+//         paymentIntentId:PaymentIntent.id,
+//         orderId: orderId,
+//         paymentMethod:'credit_card',
+//         paymentStatus:'success',
+//         amount:PaymentIntent.amount
+//       },
+//       { transaction });
+
+//       await Orders.update(
+//         { status: 'in_progress' },
+//         {
+//           where: { id: orderId },
+//           transaction, // Pass transaction to ensure atomicity
+//         }
+//       );
+
+//       publishToQueue("product","minaus one")
+
+//       await transaction.commit();
+
+//       res.status(200).json({payment});
+//     } else {
+//       res.status(400).send('Payment not successful');
+//     }
+//   };
+
+exports.confirmPayment = asyncHandler(async (req, res) => {
+    const { paymentIntent, orderId } = req.body;
+  
+
+  
+    try {
+      console.log("Payment Intent Received:", paymentIntent);
+  
+      // Retrieve the payment intent from Stripe
+      const retrievedPaymentIntent = await stripe.paymentIntents.retrieve(paymentIntent.id);
+  
+      if (retrievedPaymentIntent.status === 'succeeded') {
+       
+  
+        // Log payment intent details
+        console.log("Payment Intent Retrieved:", retrievedPaymentIntent);
+  
+        // Create a new payment record
+        const payment = await Payments.create(
+          {
+            paymentIntentId: retrievedPaymentIntent.id,
+            orderId: retrievedPaymentIntent.metadata.order_id,
+            paymentMethod: 'credit_card',
+            paymentStatus: 'success',
+            amount: retrievedPaymentIntent.amount,
+          },// Pass transaction to ensure atomicity
+        );
+
+
+  
+        // Update the order's status to 'in_progress'
+        await Orders.update(
+          { status: 'Inprogress' },
+          {
+            where: { id: retrievedPaymentIntent.metadata.order_id },// Pass transaction to ensure atomicity
+          }
+        );
+
+        const orderItems = await OrderItems.findAll({
+          where: { orderId: retrievedPaymentIntent.metadata.order_id },
       });
+      
+      console.log(orderItems);
+      
+      // Extract only the productId values
+      const products = orderItems.map(item => ({"productId":item.productId, "quantity":item.quantity}));
+  
+        // Publish a message to the queue
+        publishToQueue("order_product",products);
+  
 
-      publishToQueue("product","minaus one")
+  
+        // Respond with the payment record
+        res.status(200).json({ payment });
+      } else {
+        console.error("Payment was not successful:", retrievedPaymentIntent.status);
+        res.status(400).json({ error: 'Payment not successful' });
+      }
+    } catch (e) {
+      // Rollback the transaction if any error occurs
 
-      res.status(200).json({payment});
-    } else {
-      res.status(400).send('Payment not successful');
+      console.error("Error confirming payment:", e);
+      res.status(500).json({
+        success: false,
+        message: "Payment confirmation failed",
+        error: e.message,
+      });
     }
-  };
+  })

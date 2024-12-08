@@ -14,8 +14,27 @@ async function connectRabbitMQ() {
     connection = await amqp.connect(process.env.MSG_QUEUE_URL);
     console.log('Connected to RabbitMQ');
 
+    connection.on('error', (err) => {
+      console.error('RabbitMQ connection error:', err.message);
+    });
+
+    connection.on('close', () => {
+      console.error('RabbitMQ connection closed.'); // Attempt to reconnect
+    });
+
+
+
     // Create a channel
     channel = await connection.createChannel();
+
+    channel.on('error', (err) => {
+      console.error('RabbitMQ channel error:', err.message);
+    });
+
+    channel.on('close', () => {
+      console.error('RabbitMQ channel closed.');
+    });
+    
     console.log('RabbitMQ channel created');
   } catch (error) {
     console.error('Error connecting to RabbitMQ:', error.message);
@@ -29,10 +48,10 @@ async function connectRabbitMQ() {
 async function publishToQueue(queueName, message) {
   if (!channel) throw new Error('RabbitMQ channel is not initialized');
   await channel.assertQueue(queueName, { durable: true });
-  channel.sendToQueue(queueName, Buffer.from(message));
-  console.log(`Message sent to queue "${queueName}": ${message}`);
+  const messageString = typeof message === 'string' ? message : JSON.stringify(message);
+  channel.sendToQueue(queueName, Buffer.from(messageString));
+  console.log(`Message sent to queue "${queueName}": ${messageString}`);
 }
-
 /**
  * Consume messages from a queue
  */
@@ -41,7 +60,14 @@ async function consumeFromQueue(queueName, callback) {
   await channel.assertQueue(queueName, { durable: true });
   channel.consume(queueName, (msg) => {
     if (msg !== null) {
-      callback(msg.content.toString());
+      const message = msg.content.toString();
+      let parsedMessage;
+      try {
+        parsedMessage = JSON.parse(message); // Attempt to parse JSON
+      } catch {
+        parsedMessage = message; // If parsing fails, treat as a plain string
+      }
+      callback(parsedMessage);
       channel.ack(msg);
     }
   });

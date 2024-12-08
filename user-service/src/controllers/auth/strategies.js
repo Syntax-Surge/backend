@@ -15,7 +15,7 @@ module.exports = passport.use(
       callbackURL: "/oauth2/redirect/google",
     },
     async function (accessToken, refreshToken, profile, callback) {
- console.log('profile ', profile)
+//  console.log('profile ', profile)
       try {
         // console.log("google signin");
         
@@ -27,9 +27,9 @@ module.exports = passport.use(
         // console.log(user,profile);
 
         if (user) return callback(null, user);   //return for session creation if user already exists
-        console.log('profile.emails[0].value :', profile.emails[0].value )
-        console.log('profile.displayName :', profile.displayName )
-        console.log('profile.photos[0].value :', profile.photos[0].value )
+        // console.log('profile.emails[0].value :', profile.emails[0].value )
+        // console.log('profile.displayName :', profile.displayName )
+        // console.log('profile.photos[0].value :', profile.photos[0].value )
         user = await User.create({
           email: profile.emails[0].value,
           password: "54343534",  // Placeholder for now; use a secure value
@@ -109,17 +109,21 @@ passport.use(
 passport.use(new LocalStrategy(
   async function (email, password, cb) {
     try {
+      console.log('Came hereeeeeeeeeeeeeeee user strat')
       console.log("email",email);
       
       const user = await User.findOne({ where: { email } });
-      console.log(user);
+      console.log("userrrrrrrrr",user);
       
       if (!user) return cb(null, false, { message: 'User not found' });
 
       const isMatched = await bcrypt.compare(password, user.password);
       if (!isMatched) return cb(null, false, { message: 'Incorrect password' });
-      user.role="user"
-      const { password: _, ...userData } = user;
+      const userData={"id":user.dataValues.id,"email":user.dataValues.email,"role":"user"}
+      // const { password: _, ...userData } = user;
+      console.log("rrrr".userData);
+      
+      
       return cb(null, userData);
     } catch (err) {
       return cb(err);
@@ -129,12 +133,20 @@ passport.use(new LocalStrategy(
 
 passport.serializeUser(function (user, cb) {                //serialize(send user details to create session) user
   process.nextTick(function () {
-    cb(null, { id: user.userId, email: user.email, name: user.name,role:user.role });
+    console.log("serializeUser",user);
+    cb(null, { id: user.id, email: user.email,role:user.role });
   });
 });
 
 passport.deserializeUser(function(user, cb) {             //de-serialize user (serializeed user)
   process.nextTick(function() {
+    console.log("deserializeUser",user);
+    
     return cb(null, user);  
   });  
 });  
+
+
+
+
+

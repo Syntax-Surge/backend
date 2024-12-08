@@ -7,6 +7,10 @@ module.exports = (sequelize, Sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
+      paymentIntentId:  {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       orderId: {
         type: DataTypes.BIGINT,
         allowNull: false,

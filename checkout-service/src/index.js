@@ -16,12 +16,8 @@ app.use(cors());
   try {
     await connectRabbitMQ();
 
-    publishToQueue("product","minaus one")
+    // publishToQueue("order_product",["ddd","dsdad","minaus one"])
 
-    // // Example: Consume messages from the queue on startup
-    // await consumeFromQueue(process.env.QUEUE_NAME, (message) => {
-    //   console.log(`Received message: ${message}`);
-    // });
   } catch (error) {
     console.error('Failed to initialize RabbitMQ:', error.message);
     process.exit(1); // Exit if RabbitMQ fails
@@ -72,14 +68,32 @@ db.sequelize.sync().then(function () {
 
 
 //routes
-const paymentRoute=require("./routers/payment");
+const paymentRoute=require("./routes/payment");
 // const orderConfirmationRoute=require("./routers/orderConfirmationRoute")
+
+const orderRoutes=require("./routers/orderRoutes");
 
 app.use('/api/payment', paymentRoute);
 // app.use('/api/orderConfirmation', orderConfirmationRoute);
 
-const PORT = process.env.PORT || 3006;
+const cartRouter = require("./routes/shoppingCart.route");
+const { notFoundHandler, errorHandler } = require('./utils/errorHandler');
+
+// api endpoints
+app.use("/api/cart/", cartRouter);
+
+
+// Use the Not Found Handler
+app.use(notFoundHandler);
+
+// Use the General Error Handler
+app.use(errorHandler);
+
+
+const PORT = process.env.PORT || 3005;
 
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);
 });
+
+module.exports = app;
