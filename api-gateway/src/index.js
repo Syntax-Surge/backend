@@ -141,6 +141,8 @@ app.get('/', (req,res)=>{
       })
     );
 
+    
+
 app.use('/api/v1/users', limiter, createProxyMiddleware({ 
   target: USER_SERVICE, 
   changeOrigin: true,

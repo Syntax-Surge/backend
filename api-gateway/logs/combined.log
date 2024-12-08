@@ -512,3 +512,30 @@
 2024-12-08T19:15:17.987Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/profile/user/getUserByID?id=2, IP: ::1
 2024-12-08T19:15:17.998Z [[32minfo[39m]: Response - Status: 401, Method: GET, URL: /getUserByID?id=2
 2024-12-08T19:15:19.794Z [[32minfo[39m]: Response - Status: 304, Method: GET, URL: /getUserById?id=2
+2024-12-08T20:56:40.757Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T20:57:16.176Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/profile/user/getUserById?id=1, IP: ::1
+2024-12-08T20:57:16.922Z [[32minfo[39m]: Response - Status: 304, Method: GET, URL: /getUserById?id=1
+2024-12-08T20:57:16.926Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/profile/user/getUserById?id=1, IP: ::1
+2024-12-08T20:57:17.662Z [[32minfo[39m]: Response - Status: 304, Method: GET, URL: /getUserById?id=1
+2024-12-08T20:57:17.850Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/profile/user/getUserById?id=20, IP: ::1
+2024-12-08T20:57:17.853Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/profile/user/getAddressById?id=20, IP: ::1
+2024-12-08T20:57:18.556Z [[32minfo[39m]: Response - Status: 304, Method: GET, URL: /getAddressById?id=20
+2024-12-08T20:57:18.559Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/profile/user/getAddressById?id=20, IP: ::1
+2024-12-08T20:57:18.565Z [[32minfo[39m]: Response - Status: 304, Method: GET, URL: /getUserById?id=20
+2024-12-08T20:57:18.568Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/profile/user/getUserById?id=20, IP: ::1
+2024-12-08T20:57:19.157Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/profile/user/getOrders?id=1, IP: ::1
+2024-12-08T20:57:19.314Z [[32minfo[39m]: Response - Status: 304, Method: GET, URL: /getAddressById?id=20
+2024-12-08T20:57:19.316Z [[32minfo[39m]: Response - Status: 304, Method: GET, URL: /getUserById?id=20
+2024-12-08T20:57:22.670Z [[32minfo[39m]: Response - Status: 304, Method: GET, URL: /getOrders?id=1
+2024-12-08T20:57:22.673Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/profile/user/getOrders?id=1, IP: ::1
+2024-12-08T20:57:24.015Z [[32minfo[39m]: Response - Status: 304, Method: GET, URL: /getOrders?id=1
+2024-12-08T20:58:20.010Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/profile/user/getOrders?id=1, IP: ::1
+2024-12-08T20:58:23.533Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/reviews/getReviewsForUser?userId=1&productId=7, IP: ::1
+2024-12-08T20:58:23.538Z [[32minfo[39m]: Response - Status: 404, Method: GET, URL: /api/v1/reviews/getReviewsForUser?userId=1&productId=7
+2024-12-08T20:58:23.540Z [[32minfo[39m]: Response - Status: 304, Method: GET, URL: /getOrders?id=1
+2024-12-08T21:04:51.853Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T21:05:45.517Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T21:05:55.989Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/reviews/getReviewsForUser?userId=1&productId=7, IP: ::1
+2024-12-08T21:05:56.615Z [[32minfo[39m]: Response - Status: 404, Method: GET, URL: /getReviewsForUser?userId=1&productId=7
+2024-12-08T21:06:03.479Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/reviews/getReviewsForUser?userId=1&productId=undefined, IP: ::1
+2024-12-08T21:06:04.041Z [[32minfo[39m]: Response - Status: 404, Method: GET, URL: /getReviewsForUser?userId=1&productId=undefined
