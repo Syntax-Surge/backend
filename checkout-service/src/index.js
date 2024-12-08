@@ -83,7 +83,11 @@ app.use("/api/cart/", cartRouter);
 
 app.use('/api/v1/orders', orderRoutes);
 
-
+app.get('/', (req,res)=>{
+  console.log("api checkout");
+  res.status(200).json({"service":"api checkout"})
+  
+});
 const PORT = process.env.PORT || 3006;
 
 app.listen(PORT, () => {

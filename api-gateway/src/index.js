@@ -66,7 +66,6 @@ const limiter = rateLimit({
 
 
 app.use('/api/products',limiter, createProxyMiddleware({ target: PRODUCTS_SERVICE, changeOrigin: true }));
-
 app.use('/api/checkouts',limiter, createProxyMiddleware({ target: CHECKOUT_SERVICE, changeOrigin: true }));
 app.use('/api/payments',limiter, createProxyMiddleware({ target: PAYMENTS_SERVICE, changeOrigin: true }));
 
