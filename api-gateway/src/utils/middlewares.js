@@ -67,7 +67,7 @@ exports.checkAuthentication = async (req, res, next) => {
       if (!session.passport || !session.passport.user) {
         return res.status(401).json({ msg: 'Unauthorized: User not authenticated' });
       }
-      console.log(!session.passport.user.role == 'admin');
+      console.log(session.passport.user.role,'admin');
       
       if ((session.passport.user.role) != 'admin') {
         return res.status(403).json({ msg: 'Forbidden: Admin access required' });

@@ -412,4 +412,40 @@
 2024-12-08T16:49:44.818Z [[32minfo[39m]: API Gateway running on port 3002
 2024-12-08T16:49:49.532Z [[32minfo[39m]: API Gateway running on port 3002
 2024-12-08T16:58:20.797Z [[32minfo[39m]: API Gateway running on port 3002
-2024-12-08T17:16:09.418Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T17:11:51.378Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T17:12:50.441Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/test, IP: ::1
+2024-12-08T17:12:51.086Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /test
+2024-12-08T17:13:00.600Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/user/test, IP: ::1
+2024-12-08T17:13:01.393Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /test
+2024-12-08T17:13:26.564Z [[32minfo[39m]: Request - Method: POST, URL: /api/v1/users/admin/login, IP: ::1
+2024-12-08T17:13:42.339Z [[32minfo[39m]: Response - Status: 200, Method: POST, URL: /
+2024-12-08T17:13:48.916Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/admin/test, IP: ::1
+2024-12-08T17:13:49.193Z [[32minfo[39m]: Response - Status: 403, Method: GET, URL: /test
+2024-12-08T17:14:15.674Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/admin/test, IP: ::1
+2024-12-08T17:14:16.022Z [[32minfo[39m]: Response - Status: 403, Method: GET, URL: /test
+2024-12-08T17:14:21.894Z [[32minfo[39m]: Request - Method: POST, URL: /api/v1/users/admin/login, IP: ::1
+2024-12-08T17:14:37.562Z [[32minfo[39m]: Response - Status: 200, Method: POST, URL: /
+2024-12-08T17:14:54.775Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/admin/test, IP: ::1
+2024-12-08T17:14:55.053Z [[32minfo[39m]: Response - Status: 403, Method: GET, URL: /test
+2024-12-08T17:15:23.480Z [[32minfo[39m]: Request - Method: POST, URL: /api/v1/users/login, IP: ::1
+2024-12-08T17:15:38.796Z [[32minfo[39m]: Response - Status: 200, Method: POST, URL: /login
+2024-12-08T17:15:43.380Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/user/test, IP: ::1
+2024-12-08T17:15:44.197Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /test
+2024-12-08T17:16:03.747Z [[32minfo[39m]: Request - Method: POST, URL: /api/v1/users/admin/login, IP: ::1
+2024-12-08T17:16:19.444Z [[32minfo[39m]: Response - Status: 200, Method: POST, URL: /
+2024-12-08T17:16:27.027Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/admin/test, IP: ::1
+2024-12-08T17:16:27.323Z [[32minfo[39m]: Response - Status: 403, Method: GET, URL: /test
+2024-12-08T17:16:57.227Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T17:17:01.112Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T17:17:04.575Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/admin/test, IP: ::1
+2024-12-08T17:17:04.868Z [[32minfo[39m]: Response - Status: 403, Method: GET, URL: /test
+2024-12-08T17:17:33.117Z [[32minfo[39m]: Request - Method: POST, URL: /api/v1/users/admin/login, IP: ::1
+2024-12-08T17:17:47.891Z [[32minfo[39m]: Response - Status: 200, Method: POST, URL: /
+2024-12-08T17:18:12.089Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/admin/test, IP: ::1
+2024-12-08T17:18:12.370Z [[32minfo[39m]: Response - Status: 403, Method: GET, URL: /test
+2024-12-08T17:18:22.618Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/admin/test, IP: ::1
+2024-12-08T17:18:22.894Z [[32minfo[39m]: Response - Status: 403, Method: GET, URL: /test
+2024-12-08T17:18:58.709Z [[32minfo[39m]: Request - Method: POST, URL: /api/v1/users/admin/login, IP: ::1
+2024-12-08T17:19:14.338Z [[32minfo[39m]: Response - Status: 200, Method: POST, URL: /
+2024-12-08T17:19:21.854Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/admin/test, IP: ::1
+2024-12-08T17:19:22.658Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /test
