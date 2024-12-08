@@ -7,6 +7,8 @@ const helmet = require('helmet');
 const logger = require('./logger');
 const { redisClient, isRedisConnected } = require('./utils/redis');
 const cookieParser = require('cookie-parser');
+const rateLimit = require('express-rate-limit');
+const { checkAuthentication, checkAdminAuthentication } = require('./utils/middlewares');
 
 const app = express();
 const cache = new NodeCache({ stdTTL: 60 });
@@ -59,64 +61,70 @@ const USER_SERVICE = 'http://localhost:3003';
 
 //rate limiting
 
-const rateLimit = require('express-rate-limit');
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // Limit each IP to 100 requests per windowMs
 });
-const checkAuthentication = async (req, res, next) => {
-    try {
-      if (!isRedisConnected()) {
-        return res.status(503).json({ msg: 'Redis service unavailable' });
-      }
-  console.log(req.cookies,"cokieeee");
-  
-      const sessionCookie = req.cookies['connect.sid'] || req.headers['authorization']; // Use session ID or JWT
-      if (!sessionCookie) {
-        return res.status(401).json({ msg: 'Unauthorized: No session ID provided' });
-      }
-      const sessionId = sessionCookie.split('.')[0].replace('s:', '');
 
-    console.log('Extracted Session ID:', sessionId);
-    const sessionKey = `sess:${sessionId}`;
-      
-      const sessionData = await redisClient.get(sessionKey);
-
-      console.log(sessionData);
-  
-      if (!sessionData) {
-        return res.status(401).json({ msg: 'Unauthorized: Session expired or invalid' });
-      }
-  
-      const session = JSON.parse(sessionData);
-      if (!session.passport || !session.passport.user) {
-        return res.status(401).json({ msg: 'Unauthorized: User not authenticated' });
-      }
-  
-      req.user = session.passport.user;
-      console.log(req.user);
-      
-      next();
-    } catch (error) {
-      console.error('Authentication error:', error);
-      res.status(500).json({ msg: 'Internal server error' });
-    }
-  };
-
-app.use("/gatewayLog",checkAuthentication,(req,res)=>{
-    return res.status(200).json({ msg: 'Login successful authenticated' });
-  })
-
-app.use('/api/v1/products',limiter, createProxyMiddleware({ target: PRODUCTS_SERVICE, changeOrigin: true }));
-app.use('/api/v1/users',limiter, createProxyMiddleware({ target: USER_SERVICE, changeOrigin: true }));
-app.use('/api/v1/orders',limiter, createProxyMiddleware({ target: ORDER_SERVICE, changeOrigin: true }));
-
+// test
 app.get('/', (req,res)=>{
   console.log("api gateway");
-  res.status(200).json({"service":"api gateway"})
-  
+  res.status(200).json({"service":"api gateway"}) 
 });
+
+// user routing
+// Public Admin Routes (No Authentication Needed)
+  app.use(
+    '/api/v1/users/admin/login',
+    limiter,
+    createProxyMiddleware({
+      target: `${USER_SERVICE}/admin/login`,
+      changeOrigin: true,
+    })
+  );
+  
+  // Protected Admin Routes (Authentication Needed)
+  app.use(
+    '/api/v1/users/admin',
+    limiter,
+    checkAdminAuthentication,
+    createProxyMiddleware({
+      target: `${USER_SERVICE}/admin`,
+      changeOrigin: true,
+    })
+  );
+
+    // Public Admin Routes (No Authentication Needed)
+    app.use(
+      '/api/v1/users/user/login',
+      limiter,
+      createProxyMiddleware({
+        target: `${USER_SERVICE}/user/login`,
+        changeOrigin: true,
+      })
+    );
+    
+    // Protected Admin Routes (Authentication Needed)
+    app.use(
+      '/api/v1/users/user',
+      limiter,
+      checkAuthentication,
+      createProxyMiddleware({
+        target: `${USER_SERVICE}/user`,
+        changeOrigin: true,
+        pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+      })
+    );
+
+app.use('/api/v1/users', limiter, createProxyMiddleware({ 
+  target: USER_SERVICE, 
+  changeOrigin: true,
+}));
+
+app.use('/api/v1/products',limiter, createProxyMiddleware({ target: PRODUCTS_SERVICE, changeOrigin: true }));
+app.use('/api/v1/orders',limiter, createProxyMiddleware({ target: ORDER_SERVICE, changeOrigin: true }));
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

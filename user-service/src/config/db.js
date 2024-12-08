@@ -45,13 +45,21 @@ const connectDB = async () => {
 };
 
 
-const User = require('../model/user.model')(sequelize, Sequelize.DataTypes);
+const User = require('../model/user.model')(sequelize, Sequelize.DataTypes); 
+const Admin = require('../model/admin')(sequelize, Sequelize.DataTypes);
+
+const db = {
+  sequelize,
+  Sequelize,
+  User,
+  Admin,
+  connectDB   
+};
+ 
 const Address = require('../model/address.model')(sequelize, Sequelize.DataTypes);
 // const orderItems = require('../models/orderItem')(sequelize,Sequelize);
-
-const db = {sequelize,Sequelize,User,Address,connectDB   }; 
+ 
 db.users = User;
-db.Address=Address;
-// db.orderItems = orderItems;
+db.Address=Address; 
 module.exports = db;
 // module.exports = { connectDB  , sequelize};

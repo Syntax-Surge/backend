@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
 const { connectDB , sequelize } = require('./config/db');
+const bcrypt = require('bcrypt');
 const app = express();
 const passport = require('passport');
 var session = require('express-session');
@@ -94,18 +95,24 @@ app.use(passport.authenticate('session'));
 // Initialize DB Connection
 connectDB();
 
+
+app.use((req, res, next) => {
+  console.log('Incoming Cookies:', req.cookies);
+  console.log('Session:', req.session);
+  next();
+});
+
 // Other middlewares and routes setup here
 
-
 const PORT = process.env.PORT;
-db.sequelize.sync().then(function () {
-  // app.listen(port, function () {
-  //   console.log("server is successfully running!");
-  // });
-});
+db.sequelize.sync().then(function () {});
+
+
+
 
 
 const authRoutes = require('./routes/auth routes/authRoutes');
+const adminRoutes = require('./routes/auth routes/adminAuthRoutes');
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
 const apiErrorHandler = require('./middlewares/apiErrorHandler');
 const { checkAuthentication } = require('./middlewares/auth');
@@ -113,10 +120,33 @@ const { checkAuthentication } = require('./middlewares/auth');
 // const db = require('./model');
 
 app.use('/' , authRoutes)
+app.use('/admin' , adminRoutes)
 
-app.use("/log",(req,res)=>{
+// const hashedPaswrd = async() => {
+//   const saltRounds = parseInt(process.env.SALT_ROUNDS) || 12;
+//   const hashedPassword =await  bcrypt.hash("12341234", saltRounds);
+//   console.log('hashedPassword :', hashedPassword )
+// }
+// hashedPaswrd();
+
+app.use('/api/v1/users', userRoutes);
+
+
+
+
+app.get("/test",(req,res)=>{
   console.log(req.user,"cokieeee");
-  return res.status(200).json({ msg: 'Login successful authenticated' });
+  return res.status(200).json({ msg: 'hey everyone' });
+})
+
+app.get("/user/test",(req,res)=>{
+  console.log(req.user,"cokieeee");
+  return res.status(200).json({ msg: 'hey user ' });
+})
+
+app.get("/admin/test",(req,res)=>{
+  console.log(req.user,"cokieeee");
+  return res.status(200).json({ msg: 'hey admin ' });
 })
 
 app.use('/api/v1/users', userRoutes);
