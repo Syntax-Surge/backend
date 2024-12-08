@@ -90,7 +90,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 
-const PORT = process.env.PORT || 3006;
+const PORT = process.env.PORT || 3005;
 
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);
