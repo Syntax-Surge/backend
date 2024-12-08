@@ -28,8 +28,8 @@ passport.use(new LocalStrategy(
 
       const isMatched = await bcrypt.compare(password, user.password);
       if (!isMatched) return cb(null, false, { message: 'Incorrect password' });
-      user.role="user";
-      const { password: _, ...userData } = user;
+      // user.role="user";
+      const userData={"id":user.dataValues.id,"email":user.dataValues.email,"role":"user"}
       return cb(null, userData);
     } catch (err) {
       return cb(err);
@@ -39,7 +39,7 @@ passport.use(new LocalStrategy(
 
 passport.serializeUser(function (user, cb) {                //serialize(send user details to create session) user
   process.nextTick(function () {
-    cb(null, { id: user.userId, email: user.email, name: user.name,role:user.role });
+    cb(null, { id: user.userId, email: user.email, name: user.name });
   });
 });
 

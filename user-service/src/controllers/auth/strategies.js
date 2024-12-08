@@ -113,14 +113,17 @@ passport.use(new LocalStrategy(
       console.log("email",email);
       
       const user = await User.findOne({ where: { email } });
-      console.log(user);
+      console.log("userrrrrrrrr",user);
       
       if (!user) return cb(null, false, { message: 'User not found' });
 
       const isMatched = await bcrypt.compare(password, user.password);
       if (!isMatched) return cb(null, false, { message: 'Incorrect password' });
-      user.role="user";
-      const { password: _, ...userData } = user;
+      const userData={"id":user.dataValues.id,"email":user.dataValues.email,"role":"user"}
+      // const { password: _, ...userData } = user;
+      console.log("rrrr".userData);
+      
+      
       return cb(null, userData);
     } catch (err) {
       return cb(err);
@@ -130,12 +133,20 @@ passport.use(new LocalStrategy(
 
 passport.serializeUser(function (user, cb) {                //serialize(send user details to create session) user
   process.nextTick(function () {
-    cb(null, { id: user.userId, email: user.email, name: user.name,role:user.role });
+    console.log("serializeUser",user);
+    cb(null, { id: user.id, email: user.email,role:user.role });
   });
 });
 
 passport.deserializeUser(function(user, cb) {             //de-serialize user (serializeed user)
   process.nextTick(function() {
+    console.log("deserializeUser",user);
+    
     return cb(null, user);  
   });  
 });  
+
+
+
+
+
