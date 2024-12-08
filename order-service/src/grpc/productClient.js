@@ -9,7 +9,7 @@ const productProto = grpc.loadPackageDefinition(packageDefinition).product;
 
 // Create a gRPC client
 const productClient = new productProto.ProductService(
-    'localhost:50052', // Product microservice gRPC server address
+    '127.0.0.1:50052', // Product microservice gRPC server address
     grpc.credentials.createInsecure()
 );
 

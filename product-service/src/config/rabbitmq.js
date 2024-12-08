@@ -1,7 +1,6 @@
 // rabbitmqService.js
 require('dotenv').config();
 const amqp = require('amqplib');
-MSG_QUEUE_URL="amqps://emxilnnn:Y-1sbziq3DXeY9XpqM-XrP-3MOQ4L48D@sparrow.rmq.cloudamqp.com/emxilnnn"
 
 let connection = null;
 let channel = null;
@@ -12,11 +11,30 @@ let channel = null;
 async function connectRabbitMQ() {
   try {
     // Connect to RabbitMQ server using the URL from .env
-    connection = await amqp.connect(process.env.MSG_QUEUE_URL|| MSG_QUEUE_URL);
+    connection = await amqp.connect(process.env.MSG_QUEUE_URL);
     console.log('Connected to RabbitMQ');
+
+    connection.on('error', (err) => {
+      console.error('RabbitMQ connection error:', err.message);
+    });
+
+    connection.on('close', () => {
+      console.error('RabbitMQ connection closed.'); // Attempt to reconnect
+    });
+
+
 
     // Create a channel
     channel = await connection.createChannel();
+
+    channel.on('error', (err) => {
+      console.error('RabbitMQ channel error:', err.message);
+    });
+
+    channel.on('close', () => {
+      console.error('RabbitMQ channel closed.');
+    });
+    
     console.log('RabbitMQ channel created');
   } catch (error) {
     console.error('Error connecting to RabbitMQ:', error.message);
