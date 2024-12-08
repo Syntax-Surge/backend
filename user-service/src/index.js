@@ -104,7 +104,7 @@ app.use((req, res, next) => {
 
 // Other middlewares and routes setup here
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3003;
 db.sequelize.sync().then(function () {});
 
 

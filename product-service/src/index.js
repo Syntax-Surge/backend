@@ -25,7 +25,7 @@ console.log("Line 15 called");
 
     consumeFromQueue("order_product",(message)=>{
       const parsedMessage = JSON.parse(message);
-      console.log("ordermqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq",parsedMessage);
+      console.log("order",parsedMessage);
       updateProduct_OrderItem(parsedMessage)
     })
 
