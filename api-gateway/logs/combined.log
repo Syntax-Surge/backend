@@ -449,3 +449,29 @@
 2024-12-08T17:19:14.338Z [[32minfo[39m]: Response - Status: 200, Method: POST, URL: /
 2024-12-08T17:19:21.854Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/admin/test, IP: ::1
 2024-12-08T17:19:22.658Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /test
+2024-12-08T19:44:01.200Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T19:44:03.969Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/product/test, IP: ::1
+2024-12-08T19:44:03.973Z [[32minfo[39m]: Response - Status: 404, Method: GET, URL: /api/v1/product/test
+2024-12-08T19:44:07.941Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/products/test, IP: ::1
+2024-12-08T19:44:07.947Z [[32minfo[39m]: Response - Status: 504, Method: GET, URL: /test
+2024-12-08T19:44:17.633Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T19:44:35.535Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T19:44:47.826Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/orders/test, IP: ::1
+2024-12-08T19:44:47.836Z [[32minfo[39m]: Response - Status: 504, Method: GET, URL: /test
+2024-12-08T19:46:47.924Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T19:49:13.257Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/orders/test, IP: ::1
+2024-12-08T19:49:13.274Z [[32minfo[39m]: Response - Status: 404, Method: GET, URL: /test
+2024-12-08T19:49:40.378Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/products/test, IP: ::1
+2024-12-08T19:49:40.388Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /test
+2024-12-08T20:14:55.362Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/products/test, IP: ::1
+2024-12-08T20:14:55.371Z [[32minfo[39m]: Response - Status: 404, Method: GET, URL: /test
+2024-12-08T20:14:59.226Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/products/, IP: ::1
+2024-12-08T20:14:59.231Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
+2024-12-08T20:15:10.401Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/products/api/v1/products/, IP: ::1
+2024-12-08T20:15:11.645Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /api/v1/products/
+2024-12-08T20:28:57.441Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/products/products, IP: ::1
+2024-12-08T20:28:58.768Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /products
+2024-12-08T20:29:33.027Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/products/products, IP: ::1
+2024-12-08T20:29:34.415Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /products
+2024-12-08T20:30:06.543Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/products/products/admin, IP: ::1
+2024-12-08T20:30:06.931Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /products/admin
