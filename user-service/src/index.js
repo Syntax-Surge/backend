@@ -8,6 +8,7 @@ const passport = require('passport');
 // const db = require("../src/model/user.model")(sequelize , sequelize.Sequelize);
 var session = require('express-session');
 const db = require('./config/db');
+const userRoutes = require('./routes/userRoutes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -45,9 +46,21 @@ db.sequelize.sync().then(function () {
 
 
 const authRoutes = require('./routes/auth routes/authRoutes');
+const globalErrorHandler = require('./middlewares/globalErrorHandler');
+const apiErrorHandler = require('./middlewares/apiErrorHandler');
+// const { createError } = require('./controllers/userController');
 // const db = require('./model');
 
 app.use('/' , authRoutes)
+
+app.use('/api/v1/users', userRoutes);
+// app.use('/api/v1/error',apiErrorHandler, createError);
+
+
+
+// app.use(globalErrorHandler)
+// router.use(apiErrorHandler);
+
 
 
 

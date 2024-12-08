@@ -2,7 +2,7 @@ const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const path = require('path');
 const { Product } = require('./config/db');
-const { connectDB , sequelize } = require('./config/db');
+const { connectDB } = require('./config/db');
 
 // Load the proto file
 const PROTO_PATH = path.join(__dirname, 'grpc/product.proto');
@@ -89,5 +89,5 @@ server.addService(productProto.ProductService.service, {
 const PORT = 50052; // gRPC server for Product microservice
 server.bindAsync(`127.0.0.1:${PORT}`, grpc.ServerCredentials.createInsecure(), () => {
     console.log(`Product gRPC server running at :${PORT}`);
-    server.start();
 });
+ 

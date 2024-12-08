@@ -71,6 +71,8 @@ db.sequelize.sync().then(function () {
 const paymentRoute=require("./routes/payment");
 // const orderConfirmationRoute=require("./routers/orderConfirmationRoute")
 
+const orderRoutes=require("./routers/orderRoutes");
+
 app.use('/api/payment', paymentRoute);
 // app.use('/api/orderConfirmation', orderConfirmationRoute);
 
