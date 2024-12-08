@@ -539,3 +539,4 @@
 2024-12-08T21:05:56.615Z [[32minfo[39m]: Response - Status: 404, Method: GET, URL: /getReviewsForUser?userId=1&productId=7
 2024-12-08T21:06:03.479Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/reviews/getReviewsForUser?userId=1&productId=undefined, IP: ::1
 2024-12-08T21:06:04.041Z [[32minfo[39m]: Response - Status: 404, Method: GET, URL: /getReviewsForUser?userId=1&productId=undefined
+2024-12-08T21:13:13.704Z [[32minfo[39m]: API Gateway running on port 3002
