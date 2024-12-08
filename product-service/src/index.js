@@ -7,6 +7,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const filterRoutes = require('./routes/filterRoutes');
 const productOpRoutes = require('./routes/productOp routes/productOp.route');
+const searchRoutes = require('./routes/serch');
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/products', productOpRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
 app.use('/api/v1/filter', filterRoutes);
+app.use('/api/v1/search', searchRoutes);
 
 const PORT = process.env.PORT || 3004;
 

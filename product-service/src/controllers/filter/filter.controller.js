@@ -2,23 +2,27 @@ const { Op, where } = require('sequelize');
 const { Product, Category } = require('../../config/db');
 
 const filter = async (req, res) => {
-  console.log('filter');
+  const page = req.query.page;
+  const limit = 10;
 
+  let offset = limit * (page - 1);
+  // console.log( '==========',page, limit, offset);
   try {
-    const { minPrice, maxPrice, minWeight, maxWeight, catogories } = req.query;
-    console.log(req.query.categories);
+    
+    const { minValue, maxValue, minWeight, maxWeight, filteredCategory } =
+      req.query;
 
     const conditions = {
       [Op.and]: [],
     };
 
-    if (minPrice)
+    if (minValue)
       conditions[Op.and].push({
-        unitPrice: { [Op.gte]: parseFloat(minPrice) },
+        unitPrice: { [Op.gte]: parseFloat(minValue) },
       });
-    if (maxPrice)
+    if (maxValue)
       conditions[Op.and].push({
-        unitPrice: { [Op.lte]: parseFloat(maxPrice) },
+        unitPrice: { [Op.lte]: parseFloat(maxValue) },
       });
     if (minWeight)
       conditions[Op.and].push({
@@ -28,19 +32,23 @@ const filter = async (req, res) => {
       conditions[Op.and].push({
         unitWeight: { [Op.lte]: parseFloat(maxWeight) },
       });
-    // if (categoryId) conditions[Op.and].push({ categoryId: parseInt(categoryId) });
 
     // Parse and apply category filters if provided
     let categoryFilter = undefined;
-    if (catogories) {
-      const categoryIds = Array.isArray(catogories)
-        ? catogories.map(Number)
-        : JSON.parse(catogories);
+    if (filteredCategory) {
+      const categoryIds = Array.isArray(filteredCategory)
+        ? filteredCategory.map(Number)
+        : JSON.parse(filteredCategory);
       categoryFilter = { id: { [Op.in]: categoryIds } };
     }
 
+    // console.log(conditions);
+    
+
     // Query products with conditions and category filters
-    const products = await Product.findAll({
+    const products = await Product.findAndCountAll({
+      limit: limit,
+      offset: offset,
       where: conditions,
       include: [
         {
