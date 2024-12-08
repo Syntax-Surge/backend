@@ -8,44 +8,6 @@ const bcrypt = require('bcrypt');
 var LocalStrategy = require('passport-local');
 const { User } = require("../../config/db");
 require('../../controllers/auth/strategies')
-// var LocalStrategy = require('passport-local');
-// const bcrypt = require('bcrypt');
-// const { User } = require("../../config/db");
-
-
-// passport.use(new LocalStrategy(
-//   async function (email, password, cb) {
-//     try {
-//       console.log('Came hereeeeeeeeeeeeeeee user strat')
-//       console.log("email",email);
-      
-//       const user = await User.findOne({ where: { email } });
-// console.log('user :', user)      
-
-//       if (!user) return cb(null, false, { message: 'User not found' });
-
-//       const isMatched = await bcrypt.compare(password, user.password);
-//       if (!isMatched) return cb(null, false, { message: 'Incorrect password' });
-//       user.role="user";
-//       const { password: _, ...userData } = user;
-//       return cb(null, userData);
-//     } catch (err) {
-//       return cb(err);
-//     }
-//   }
-// ));
-
-// passport.serializeUser(function (user, cb) {                //serialize(send user details to create session) user
-//   process.nextTick(function () {
-//     cb(null, { id: user.userId, email: user.email, name: user.name,role:user.role });
-//   });
-// });
-
-// passport.deserializeUser(function(user, cb) {             //de-serialize user (serializeed user)
-//   process.nextTick(function() {
-//     return cb(null, user);  
-//   });  
-// });  
 
 //sign up user manually
 router.post('/signUp' , signUpUser)
@@ -60,7 +22,7 @@ passport.use(new LocalStrategy(
       console.log("email",email);
       
       const user = await User.findOne({ where: { email } });   
-      console.log(user);
+      // console.log(user);
       
       if (!user) return cb(null, false, { message: 'User not found' });
 
@@ -89,11 +51,10 @@ passport.deserializeUser(function(user, cb) {             //de-serialize user (s
 
 //login manually
 router.post('/login', (req, res, next) => {
-  console.log("user logged in req")
-  const usernam = req.body.username;
-  const password = req.body.password;
-  console.log('username - ', usernam);
-  console.log('password - ', password);
+  
+  console.log("user logged in req") 
+  console.log('Session after login:', req.session);
+
   passport.authenticate('local', (err, user, info) => {
       if (err) {
           // Handle any errors that might occur
@@ -117,7 +78,7 @@ router.post('/login', (req, res, next) => {
           }
 
           // Successful login
-          return res.status(200).json({msg : 'Login successful',user });
+          return res.status(200).json({msg : 'Login successful',user : req.user });
       });
   })(req, res, next);
 });
@@ -152,9 +113,7 @@ router.get(
     })(req, res, next);
   }
 );
-
-
-
+ 
 //facebook authentication
   router.get('/login/federated/facebook', passport.authenticate('facebook' ));
   
@@ -191,8 +150,15 @@ router.get(
 
 
 //logout 
-router.get('/logout', checkAuthentication, async (req, res, next) => {
+router.post('/logout',   checkAuthentication,  async (req, res, next) => {
   try {
+    console.log('Cookies:', req.cookies); // Check parsed cookies
+    console.log('Raw Cookie Header:', req.headers.cookie); // Check raw cookie string
+    
+    if (!req.cookies || !req.cookies['connect.sid']) {
+      return res.status(400).json({ msg: 'Session cookie not found' });
+    }
+    
     // Check if the user is authenticated before attempting to log out
     if (req.isAuthenticated()) {
       // Logout the user and destroy the session

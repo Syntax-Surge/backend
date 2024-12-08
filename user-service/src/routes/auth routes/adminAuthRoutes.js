@@ -1,12 +1,12 @@
 
 const express = require("express");
 const passport = require("passport"); 
-const { checkAuthentication } = require("../../middlewares/auth");
+const { checkAuthentication, isAdmin } = require("../../middlewares/auth");
 // const { checkAuthentication } = require("../../middlewares/auth");
 var router = express.Router(); 
 require('../../controllers/auth/admin/strategies');
 
-router.post('/login', (req, res, next) => {
+router.post('/login',  (req, res, next) => {
     passport.authenticate('admin-local', (err, user, info) => {
         if (err) {
             // Handle any errors that might occur
@@ -31,7 +31,10 @@ router.post('/login', (req, res, next) => {
   });
 
   
-
+  router.post('/inside', checkAuthentication, isAdmin, async (req, res, next) => {
+     console.log(" here came !!");
+    return res.status(200).json({msg : 'ggg'})
+  })
 //logout 
 router.get('/logout', checkAuthentication, async (req, res, next) => {
     try {

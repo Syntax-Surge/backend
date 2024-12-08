@@ -15,7 +15,7 @@ module.exports = passport.use(
       callbackURL: "/oauth2/redirect/google",
     },
     async function (accessToken, refreshToken, profile, callback) {
- console.log('profile ', profile)
+//  console.log('profile ', profile)
       try {
         // console.log("google signin");
         
@@ -27,9 +27,9 @@ module.exports = passport.use(
         // console.log(user,profile);
 
         if (user) return callback(null, user);   //return for session creation if user already exists
-        console.log('profile.emails[0].value :', profile.emails[0].value )
-        console.log('profile.displayName :', profile.displayName )
-        console.log('profile.photos[0].value :', profile.photos[0].value )
+        // console.log('profile.emails[0].value :', profile.emails[0].value )
+        // console.log('profile.displayName :', profile.displayName )
+        // console.log('profile.photos[0].value :', profile.photos[0].value )
         user = await User.create({
           email: profile.emails[0].value,
           password: "54343534",  // Placeholder for now; use a secure value
