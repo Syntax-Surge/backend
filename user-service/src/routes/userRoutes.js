@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { getAllUsers, createError, getUserByID, getAll, updateUser, updateShippingAddress, getUserOrder, getAddressByID, createShippingAddress } = require("../controllers/userController");
+const { getAllUsers, createError, getUserByID, getAll, updateUser, updateShippingAddress, getUserOrder, getAddressByID, createShippingAddress, getAllUserOrderItems } = require("../controllers/userController");
 const apiErrorHandler = require("../middlewares/apiErrorHandler");
 
 router.get('/' , getAllUsers)
@@ -10,7 +10,8 @@ router.get('/getAll', getAll);
 router.post('/updateUser', updateUser);
 router.put('/updateshipping', updateShippingAddress);
 router.post('/createAddress', createShippingAddress);
-router.get('/getOrders', getUserOrder); 
+router.get('/getOrders', getUserOrder);
+router.get('/getAllUserOrderItems', getAllUserOrderItems); 
 router.get('/getAddressById', getAddressByID); 
 
 
