@@ -33,7 +33,7 @@ const browseByCategory = async (req, res) => {
         res.status(200).json(products)
     } catch (error) {
         console.log("Browse error",error);
-        res.status(500).json({ error: error.message })
+        res.status(400).json({ error: error.message })
     }
 }
 
