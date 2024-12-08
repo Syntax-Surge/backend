@@ -1,8 +1,11 @@
-
+require('express-session');
 
 exports.checkAuthentication = (req, res, next) => {
+  console.log('req.isAuthenticated()  ', req.isAuthenticated())
+  console.log("Session data:", req.session);
+
   if (req.isAuthenticated()) {
-    console.log("Authenticated user:", req.user); // Log the authenticated user for debugging
+    console.log("Authenticated user:", req.user.role); // Log the authenticated user for debugging
     return next(); // User is authenticated, proceed to the next middleware
   } else {
     // User is not authenticated
@@ -27,4 +30,20 @@ exports.checkNotAuthenticated = (req, res, next) => {
   // Proceed for non-authenticated users
   next();
 };
+
+
+
+exports.isAdmin = (req, res, next) => {
+  if (req.user.role == "admin") {
+    console.log("Authenticated user:", req.user); // Log the authenticated user for debugging
+    return next(); // User is authenticated, proceed to the next middleware
+  } else {
+    // User is not authenticated
+    console.log("Unauthenticated request for:", req.originalUrl);
+      // For AJAX requests, send a JSON response instead of redirecting
+      return res.status(401).json({msg : "Unauthorized, Only admins can access this route!"});
+    
+  }
+}
+
 
