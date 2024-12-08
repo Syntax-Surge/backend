@@ -108,7 +108,7 @@ router.get(
           return res.status(500).json({ msg: 'Login error', error: loginErr.message });
         }
         // Successful login
-        res.redirect("http://localhost:3000/"); // Adjust as needed
+        res.redirect("http://localhost:3001/"); // Adjust as needed
       });
     })(req, res, next);
   }
