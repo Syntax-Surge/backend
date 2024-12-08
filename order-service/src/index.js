@@ -25,6 +25,10 @@ app.use("/api/cart/", cartRouter);
 
 const PORT = process.env.PORT || 3005;
 
-app.listen(PORT, () => {
-  console.log(`Service running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Service running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
