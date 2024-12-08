@@ -25,7 +25,7 @@ app.use(session({
   cookie : {                                                    //added by  me
     secure : false,                                             //added by  me
     expires : new Date(Date.now() + 10000),                     //added by  me
-    maxAge : 1000 * 60 ,    
+    maxAge : 1000 * 60 * 5 ,    
     httpOnly : true                                   //added by  me
 } ,
 })); 
