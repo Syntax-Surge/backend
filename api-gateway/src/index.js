@@ -5,11 +5,13 @@ const NodeCache = require('node-cache');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const helmet = require('helmet');
 const logger = require('./logger');
-
+const { redisClient, isRedisConnected } = require('./utils/redis');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const cache = new NodeCache({ stdTTL: 60 });
 
+app.use(cookieParser());
 app.use(cors());
 app.use(helmet());
 app.disable("x-powered-by");
@@ -35,8 +37,8 @@ app.use((req, res, next) => {
 
 
 const PRODUCTS_SERVICE = 'http://localhost:3004';
-const CHECKOUT_SERVICE = 'http://localhost:3003';
-const PAYMENTS_SERVICE = 'http://localhost:8003';
+const ORDER_SERVICE = 'http://localhost:3005';
+const USER_SERVICE = 'http://localhost:3003';
 
 
 // load balancing
@@ -63,14 +65,52 @@ const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // Limit each IP to 100 requests per windowMs
 });
+const checkAuthentication = async (req, res, next) => {
+    try {
+      if (!isRedisConnected()) {
+        return res.status(503).json({ msg: 'Redis service unavailable' });
+      }
+  console.log(req.cookies,"cokieeee");
+  
+      const sessionCookie = req.cookies['connect.sid'] || req.headers['authorization']; // Use session ID or JWT
+      if (!sessionCookie) {
+        return res.status(401).json({ msg: 'Unauthorized: No session ID provided' });
+      }
+      const sessionId = sessionCookie.split('.')[0].replace('s:', '');
 
+    console.log('Extracted Session ID:', sessionId);
+    const sessionKey = `sess:${sessionId}`;
+      
+      const sessionData = await redisClient.get(sessionKey);
 
-app.use('/api/products',limiter, createProxyMiddleware({ target: PRODUCTS_SERVICE, changeOrigin: true }));
+      console.log(sessionData);
+  
+      if (!sessionData) {
+        return res.status(401).json({ msg: 'Unauthorized: Session expired or invalid' });
+      }
+  
+      const session = JSON.parse(sessionData);
+      if (!session.passport || !session.passport.user) {
+        return res.status(401).json({ msg: 'Unauthorized: User not authenticated' });
+      }
+  
+      req.user = session.passport.user;
+      console.log(req.user);
+      
+      next();
+    } catch (error) {
+      console.error('Authentication error:', error);
+      res.status(500).json({ msg: 'Internal server error' });
+    }
+  };
 
-app.use('/api/checkouts',limiter, createProxyMiddleware({ target: CHECKOUT_SERVICE, changeOrigin: true }));
-app.use('/api/payments',limiter, createProxyMiddleware({ target: PAYMENTS_SERVICE, changeOrigin: true }));
+app.use("/gatewayLog",checkAuthentication,(req,res)=>{
+    return res.status(200).json({ msg: 'Login successful authenticated' });
+  })
 
-
+app.use('/api/v1/products',limiter, createProxyMiddleware({ target: PRODUCTS_SERVICE, changeOrigin: true }));
+app.use('/api/v1/users',limiter, createProxyMiddleware({ target: USER_SERVICE, changeOrigin: true }));
+app.use('/api/v1/orders',limiter, createProxyMiddleware({ target: ORDER_SERVICE, changeOrigin: true }));
 
 app.get('/', (req,res)=>{
   console.log("api gateway");

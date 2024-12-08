@@ -16,7 +16,7 @@ app.use(cors());
   try {
     await connectRabbitMQ();
 
-    publishToQueue("order_product",["ddd","dsdad","minaus one"])
+    // publishToQueue("order_product",["ddd","dsdad","minaus one"])
 
   } catch (error) {
     console.error('Failed to initialize RabbitMQ:', error.message);

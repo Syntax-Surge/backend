@@ -11,3 +11,98 @@
 2024-11-20T17:03:17.751Z [[32minfo[39m]: API Gateway running on port 3002
 2024-11-20T17:03:21.718Z [[32minfo[39m]: API Gateway running on port 3002
 2024-11-29T16:51:00.407Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:12:23.161Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:46:23.027Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:46:25.599Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:46:35.906Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:47:39.078Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:48:31.007Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:49:11.438Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:49:28.197Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:50:00.910Z [[32minfo[39m]: Request - Method: GET, URL: /gatewayLog, IP: ::1
+2024-12-03T05:50:00.918Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
+2024-12-03T05:50:47.286Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:50:57.312Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:51:04.497Z [[32minfo[39m]: Request - Method: GET, URL: /gatewayLog, IP: ::1
+2024-12-03T05:51:04.509Z [[32minfo[39m]: Response - Status: 500, Method: GET, URL: /
+2024-12-03T05:51:19.609Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:51:37.195Z [[32minfo[39m]: Request - Method: GET, URL: /gatewayLog, IP: ::1
+2024-12-03T05:51:37.209Z [[32minfo[39m]: Response - Status: 500, Method: GET, URL: /
+2024-12-03T05:52:12.378Z [[32minfo[39m]: Request - Method: GET, URL: /gatewayLog, IP: ::1
+2024-12-03T05:52:12.388Z [[32minfo[39m]: Response - Status: 500, Method: GET, URL: /
+2024-12-03T05:52:33.674Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:52:35.120Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:52:38.202Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:52:39.422Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:52:46.405Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:52:49.413Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:52:52.460Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T05:52:54.487Z [[32minfo[39m]: Request - Method: GET, URL: /gatewayLog, IP: ::1
+2024-12-03T05:52:54.496Z [[32minfo[39m]: Response - Status: 500, Method: GET, URL: /
+2024-12-03T05:53:34.384Z [[32minfo[39m]: Request - Method: GET, URL: /gatewayLog, IP: ::1
+2024-12-03T05:53:34.390Z [[32minfo[39m]: Response - Status: 500, Method: GET, URL: /
+2024-12-03T06:03:17.872Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T06:03:20.597Z [[32minfo[39m]: Request - Method: GET, URL: /gatewayLog, IP: ::1
+2024-12-03T06:03:20.602Z [[32minfo[39m]: Response - Status: 500, Method: GET, URL: /
+2024-12-03T06:04:05.214Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T06:04:06.998Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T06:04:57.942Z [[32minfo[39m]: Request - Method: GET, URL: /gatewayLog, IP: ::1
+2024-12-03T06:04:58.268Z [[32minfo[39m]: Response - Status: 401, Method: GET, URL: /
+2024-12-03T06:07:18.023Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T06:07:19.451Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T06:07:22.785Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T06:07:25.717Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T06:07:29.774Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T06:07:30.847Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T06:07:34.502Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-03T06:10:07.042Z [[32minfo[39m]: Request - Method: GET, URL: /gatewayLog, IP: ::1
+2024-12-03T06:10:07.380Z [[32minfo[39m]: Response - Status: 401, Method: GET, URL: /
+2024-12-06T11:09:33.263Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T11:12:18.158Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:12:18.512Z [[32minfo[39m]: Response - Status: 401, Method: GET, URL: /
+2024-12-06T11:17:16.704Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:17:17.051Z [[32minfo[39m]: Response - Status: 401, Method: GET, URL: /
+2024-12-06T11:18:13.270Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T11:18:17.510Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:18:17.818Z [[32minfo[39m]: Response - Status: 401, Method: GET, URL: /
+2024-12-06T11:20:27.149Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:20:27.473Z [[32minfo[39m]: Response - Status: 401, Method: GET, URL: /
+2024-12-06T11:22:31.299Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:22:31.694Z [[32minfo[39m]: Response - Status: 401, Method: GET, URL: /
+2024-12-06T11:26:29.178Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T11:26:36.518Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:26:36.940Z [[32minfo[39m]: Response - Status: 401, Method: GET, URL: /
+2024-12-06T11:29:22.546Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:29:22.934Z [[32minfo[39m]: Response - Status: 401, Method: GET, URL: /
+2024-12-06T11:31:43.673Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T11:31:47.502Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:31:47.517Z [[32minfo[39m]: Response - Status: 500, Method: GET, URL: /
+2024-12-06T11:31:58.546Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T11:32:03.061Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:32:03.079Z [[32minfo[39m]: Response - Status: 500, Method: GET, URL: /
+2024-12-06T11:32:34.299Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T11:32:38.028Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:32:38.442Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
+2024-12-06T11:50:39.569Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T11:50:39.976Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
+2024-12-06T12:02:37.755Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:02:55.870Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T12:02:56.191Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
+2024-12-06T12:03:19.910Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:03:21.822Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:03:27.741Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:03:29.669Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T12:03:29.964Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
+2024-12-06T12:04:38.659Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:04:40.742Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:04:42.479Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:04:45.530Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:05:03.566Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:05:08.554Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:05:17.136Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:05:39.279Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:05:44.715Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-06T12:07:14.302Z [[32minfo[39m]: Request - Method: GET, URL: /gatewaylog, IP: ::1
+2024-12-06T12:07:14.599Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /
+2024-12-06T12:08:03.070Z [[32minfo[39m]: Request - Method: GET, URL: /api/users/log, IP: ::1
+2024-12-06T12:08:03.668Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /log
