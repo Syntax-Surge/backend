@@ -19,7 +19,7 @@ passport.use('admin-local',new LocalStrategy(
       console.log('isMatched :', isMatched)
 
         if (!isMatched) return cb(null, false, { message: 'Incorrect password' });
-        const userData={"id":user.dataValues.id,"email":user.dataValues.email,"role":"user"}
+        const userData={"id":user.dataValues.id,"email":user.dataValues.email,"role":"admin"}
         // user.role="admin";
         // const { password: _, ...userData } = user;
         return cb(null, userData);
