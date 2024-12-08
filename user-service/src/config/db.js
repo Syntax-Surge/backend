@@ -35,6 +35,12 @@ const sequelize = new Sequelize(database, user, password, {
 // db.sequelize = sequelize;
 
 
+// const db = {};
+
+// db.Sequelize = Sequelize;
+// db.sequelize = sequelize;
+
+
 const connectDB = async () => {
   try {
     await sequelize.authenticate();

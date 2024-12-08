@@ -43,6 +43,7 @@ app.use((req, res, next) => {
 // Other middlewares and routes setup here
 
 
+
 const PORT = process.env.PORT;
 db.sequelize.sync().then(function () {});
 
@@ -75,6 +76,16 @@ app.use('/admin' , adminRoutes)
 
 app.use('/api/v1/users', userRoutes);
 
+
+
+
+app.use('/api/v1/users', userRoutes);
+// app.use('/api/v1/error',apiErrorHandler, createError);
+
+
+
+// app.use(globalErrorHandler)
+// router.use(apiErrorHandler);
 
 
 
