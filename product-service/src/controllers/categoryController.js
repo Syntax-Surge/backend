@@ -206,7 +206,7 @@ const updateCategory = asyncHandler(async (req, res) => {
     
         } catch (error) {
             console.log("Error updating category:",error)
-            res.status(500);
+            res.status(500)
             throw new Error(error.message || "Cannot update category");
         }
     }
@@ -261,7 +261,7 @@ const deleteCategory = asyncHandler(async (req, res) => {
         res.status(200).json(data);
 
     } catch (error) {
-        res.status(400);
+        res.status(404);
         throw new Error(error.message || "Can't remove Category");
     }
 })
