@@ -29,6 +29,12 @@ const sequelize = new Sequelize(database, user, password, {
 });
 
 
+// const db = {};
+
+// db.Sequelize = Sequelize;
+// db.sequelize = sequelize;
+
+
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
@@ -39,4 +45,21 @@ const connectDB = async () => {
 };
 
 
-module.exports = { connectDB };
+const User = require('../model/user.model')(sequelize, Sequelize.DataTypes); 
+const Admin = require('../model/admin')(sequelize, Sequelize.DataTypes);
+
+const db = {
+  sequelize,
+  Sequelize,
+  User,
+  Admin,
+  connectDB   
+};
+ 
+const Address = require('../model/address.model')(sequelize, Sequelize.DataTypes);
+// const orderItems = require('../models/orderItem')(sequelize,Sequelize);
+ 
+db.users = User;
+db.Address=Address; 
+module.exports = db;
+// module.exports = { connectDB  , sequelize};

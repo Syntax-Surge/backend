@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Express </title>
+		<link rel="stylesheet" href="/css/base.css">
+		<link rel="stylesheet" href="/css/index.css">
+		<link rel="stylesheet" href="/css/login.css">
+	</head>
+	<body>
+		<section class="prompt">
+			<h3>Sign in</h3>
+		
+			
+		
+			<form action="/login/" method="post" >
+				<section>
+					<label for="username">Username</label>
+					<input id="username" name="username" type="text" autocomplete="username" required autofocus>
+				</section>
+				<section>
+					<label for="current-password">Password</label>
+					<input id="current-password" name="password" type="password" autocomplete="current-password" required>
+				</section>
+				<button type="submit">Sign in</button>
+				<br >
+				<!-- <a href='/login/federated/facebook'>Login with Facebook</a> \n <a href='/login/federated/google'>Login with Google</a> -->
+			</form>
+			<form action="/login/federated/facebook" method="GET">
+				<button type="submit"  style="background-color: #1877F2;">Sign in with Facebook</button>
+			  </form>
+			  <br>
+			  <form action="/login/federated/google" method="GET">
+				<button type="submit"  style="background-color: darkcyan;">Sign in with Google</button>
+			  </form>
+		</section>
+		<footer class="info">
+			<p>Created by <a href="https://www.jaredhanson.me">Nimeth Nimdinu</a></p>
+			<p>Part of <a href="https://todomvc.com">Kathawo Application</a></p>
+			<p>System powered by <a href="https://www.passportjs.org">Node js</a></p>
+		</footer>
+	</body>
+</html>
+
+
+

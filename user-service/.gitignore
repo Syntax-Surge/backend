@@ -1,0 +1,9 @@
+# Dependency directories specific to each service
+# order-service/node_modules/
+# checkout-service/node_modules/
+# user-service/node_modules/
+# product-service/node_modules/
+# api-gateway/node_modules/
+
+/node_modules
+
