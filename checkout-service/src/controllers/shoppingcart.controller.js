@@ -8,6 +8,9 @@ const {
 // Add to Cart
 const addToCart = asyncHandler(async (req, res) => {
   const { userId, productId, quantity } = req.body;
+  const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+  console.log(user,"user");
+
 
   if (!userId || !productId || !quantity) {
     res.status(400).json({ message: "Missing required fields!" });
@@ -17,7 +20,7 @@ const addToCart = asyncHandler(async (req, res) => {
   try {
     // Check if the product already exists in the user's cart
     const existingCartItem = await ShoppingCart.findOne({
-      where: { userId, productId },
+      where: { userId:user.id, productId },
     });
     // console.log("dddd", existingCartItem);
 
@@ -45,6 +48,8 @@ const addToCart = asyncHandler(async (req, res) => {
 // Remove from Cart
 const removeCart = asyncHandler(async (req, res) => {
   const { userId, productId } = req.body;
+  const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+  console.log(user,"user");
 
   if (!userId || !productId) {
     res.status(400).json({ message: "Missing required fields!" });
@@ -53,7 +58,7 @@ const removeCart = asyncHandler(async (req, res) => {
 
   try {
     const cartItem = await ShoppingCart.findOne({
-      where: { userId, productId },
+      where: { userId:user.id, productId },
     });
 
     if (!cartItem) {
@@ -73,6 +78,10 @@ const removeCart = asyncHandler(async (req, res) => {
 const getCart = asyncHandler(async (req, res) => {
   const { userId } = req.params;
   console.log(req.user);
+
+  const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+  console.log(user,"user");
+
   if (!userId) {
     res.status(400).json({ message: "Missing user ID!" });
     return;
@@ -80,7 +89,7 @@ const getCart = asyncHandler(async (req, res) => {
 
   try {
     const cartItems = await ShoppingCart.findAll({
-      where: { userId },
+      where: { userId:user.id },
     });
 
     if (!cartItems.length) {
