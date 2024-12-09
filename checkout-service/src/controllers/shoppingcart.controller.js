@@ -1,16 +1,21 @@
-const asyncHandler = require("express-async-handler");
-const { ShoppingCart } = require("../config/db.js");
+const asyncHandler = require('express-async-handler');
+const { ShoppingCart } = require('../config/db.js');
 const {
   getProductsByIds,
   getProductById,
-} = require("../grpc/productClient.js");
+} = require('../grpc/productClient.js');
 
 // Add to Cart
 const addToCart = asyncHandler(async (req, res) => {
-  const { userId, productId, quantity } = req.body;
+  const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+  console.log(user, 'user');
+  const userId = user.id;
+  const { productId, quantity } = req.body;
+
+  console.log(userId, productId, quantity);
 
   if (!userId || !productId || !quantity) {
-    res.status(400).json({ message: "Missing required fields!" });
+    res.status(400).json({ message: 'Missing required fields!' });
     return;
   }
 
@@ -38,7 +43,7 @@ const addToCart = asyncHandler(async (req, res) => {
     res.status(201).json(cartItem);
   } catch (error) {
     res.status(500);
-    throw new Error(error.message || "Error adding item to cart.");
+    throw new Error(error.message || 'Error adding item to cart.');
   }
 });
 
@@ -47,7 +52,7 @@ const removeCart = asyncHandler(async (req, res) => {
   const { userId, productId } = req.body;
 
   if (!userId || !productId) {
-    res.status(400).json({ message: "Missing required fields!" });
+    res.status(400).json({ message: 'Missing required fields!' });
     return;
   }
 
@@ -57,15 +62,15 @@ const removeCart = asyncHandler(async (req, res) => {
     });
 
     if (!cartItem) {
-      res.status(404).json({ message: "Cart item not found!" });
+      res.status(404).json({ message: 'Cart item not found!' });
       return;
     }
 
     await cartItem.destroy();
-    res.status(200).json({ message: "Item removed from cart successfully!" });
+    res.status(200).json({ message: 'Item removed from cart successfully!' });
   } catch (error) {
     res.status(500);
-    throw new Error(error.message || "Error removing item from cart.");
+    throw new Error(error.message || 'Error removing item from cart.');
   }
 });
 
@@ -74,7 +79,7 @@ const getCart = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
   if (!userId) {
-    res.status(400).json({ message: "Missing user ID!" });
+    res.status(400).json({ message: 'Missing user ID!' });
     return;
   }
 
@@ -84,7 +89,7 @@ const getCart = asyncHandler(async (req, res) => {
     });
 
     if (!cartItems.length) {
-      res.status(404).json({ message: "No items in the cart!" });
+      res.status(404).json({ message: 'No items in the cart!' });
       return;
     }
 
@@ -107,7 +112,7 @@ const getCart = asyncHandler(async (req, res) => {
     res.status(200).json(cartItemsWithProductDetails);
   } catch (error) {
     res.status(500);
-    throw new Error(error.message || "Error fetching cart items.");
+    throw new Error(error.message || 'Error fetching cart items.');
   }
 });
 

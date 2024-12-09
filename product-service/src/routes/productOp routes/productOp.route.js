@@ -11,7 +11,7 @@ router.get('/search',search);
 router.get('/filter',filter);
 router.get('/' , getProducts);
 router.get('/:id' , getProduct);
-router.post('/admin' , createProduct);
+router.post('/admin' , createProduct);  
 router.put('/admin/:id' , updateProduct);
 router.delete('/admin/:id', deleteProduct);
 // tempory
