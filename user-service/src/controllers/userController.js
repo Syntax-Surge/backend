@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler")
 // const { User } = require("../config/db");
 const db  = require("../config/db")
 const { where } = require("sequelize");
-const {getOrderItemsById} = require("../grpc/orderClient")
+const {getOrderItemsById, getAllOrderItems} = require("../grpc/orderClient")
 
 const User=db.users;
 const Address=db.Address;
@@ -17,7 +17,8 @@ const getAllUsers = asyncHandler(async (req, res) => {
         const users = await User.findAndCountAll({
             limit: limit,
             offset: offset,
-            order: [['createdAt', 'DESC']]
+            order: [['createdAt', 'DESC']],
+            attributes: ['id', 'firstName', 'lastName','email', 'contactNo', 'profileImage'],
         })
         res.status(200).json(users);
     } catch (error) {
@@ -259,7 +260,7 @@ const updateShippingAddress = asyncHandler(async (req, res) => {
 const getUserOrder = async (req, res) => {
     const userId = req.query.id; // Extract user ID from route params
     // const userId = 1;
-
+    console.log("hello ",userId);
     if (isNaN(userId)) {
         return res.status(400).json({ error: "Invalid user ID" });
     }
@@ -269,6 +270,17 @@ const getUserOrder = async (req, res) => {
         res.json(orderItem); // Send the gRPC response as JSON
     } catch (error) {
         console.error("Error calling getOrderItemsById:", error);
+        res.status(500).json({ error: error.details || "Internal server error" });
+    }
+};
+
+const getAllUserOrderItems = async (req, res) => {
+
+    try {
+        const orderItem = await getAllOrderItems(); // Call gRPC function
+        res.json(orderItem); // Send the gRPC response as JSON
+    } catch (error) {
+        console.error("Error calling getAllOrderItems:", error);
         res.status(500).json({ error: error.details || "Internal server error" });
     }
 };
@@ -299,7 +311,7 @@ const createError = asyncHandler(async (req, res) => {
 
 });
 
-module.exports = { getAllUsers, createError, updateUser, getUserByID, getAll, createShippingAddress, updateShippingAddress, getUserOrder, getAddressByID, updateUserProfile };
+module.exports = { getAllUsers, createError, updateUser, getUserByID, getAll, createShippingAddress, updateShippingAddress, getUserOrder, getAddressByID, updateUserProfile, getAllUserOrderItems };
 
 
 

@@ -4,7 +4,7 @@ package orderItems;
 
 service UserService {
   rpc GetOrderItemsById (UserRequest) returns (UserResponse);
-  rpc GetAllOrderItems (UserRequest) returns (UserResponse);
+  rpc GetAllOrderItems (UserRequest) returns (UserResponse2);
 }
 
 message UserRequest {
@@ -37,3 +37,28 @@ message Item {
 }
 
 
+
+message UserResponse2 {
+  repeated OrderItemData2 orderItems = 1;
+}
+
+message OrderItemData2 {
+  int32 orderId = 1;              // Order ID
+  int32 userId = 2;      // User ID
+  string status = 3;              // Status of order
+  string shippingMethod = 4;          // Shipping method of order
+  float payment = 5;     // Payment amount (could be null or a number)
+  repeated Item2 items = 6;  // List of items in the order
+}
+
+message Item2 {
+  int32 productId = 2;            // Product ID
+  int32 quantity = 3;             // Quantity ordered
+  int32 id = 4;                   // Unique item ID
+  string productName = 5;         // Name of the product
+  string productDescription = 6;  // Description of the product
+  string pictureLocation = 7;     // URL of the product picture
+  int32 unitWeight = 8;           // Weight of a single unit
+  int32 unitPrice = 9;            // Price per unit
+  int32 availableQuantity = 10;   // Available stock for the product
+}

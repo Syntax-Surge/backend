@@ -30,6 +30,22 @@ const getOrderItemsById = (id) => {
     });
 };
 
+const getAllOrderItems = () => {
+    return new Promise((resolve, reject) => {
+        client.GetAllOrderItems({  }, (error, response) => {
+            if (error) {
+                console.error("Error");
+                reject(error);
+            } else {
+                console.log(response);
+                
+                resolve(response);
+            }
+        });
+    });
+};
+
 module.exports = {
     getOrderItemsById,
+    getAllOrderItems
 };
