@@ -330,6 +330,8 @@ const getAddressByID = asyncHandler(async (req, res) => {
     // const id = req.query.id;
     try {
         const address = await Address.findOne({ where: { userId: id } });
+        console.log(address);
+        
         res.status(200).json(address);
     } catch (error) {
         res.status(400);

@@ -1,16 +1,15 @@
-const express = require('express');
-require('dotenv').config();
-const cors = require('cors');
-const { connectDB } = require('./config/db');
-const db = require('./config/db');
-const categoryRoutes = require('./routes/categoryRoutes');
-const reviewRoutes = require('./routes/reviewRoutes');
-const productOpRoutes = require('./routes/productOp routes/productOp.route');
-const { connectRabbitMQ, consumeFromQueue } = require('./config/rabbitmq');
-const { updateProduct_OrderItem } = require('./controllers/productController');
+const express = require("express");
+require("dotenv").config();
+const cors = require("cors");
+const { connectDB } = require("./config/db");
+const db = require("./config/db");
+const categoryRoutes = require("./routes/categoryRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
+const productOpRoutes = require("./routes/productOp routes/productOp.route");
+const { connectRabbitMQ, consumeFromQueue } = require("./config/rabbitmq");
+const { updateProduct_OrderItem } = require("./controllers/productController");
 
 const app = express();
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,27 +23,24 @@ console.log("Line 15 called");
   try {
     await connectRabbitMQ();
 
-    consumeFromQueue("order_product",(message)=>{
+    consumeFromQueue("order_product", (message) => {
       const parsedMessage = JSON.parse(message);
-      console.log("order",parsedMessage);
-      updateProduct_OrderItem(parsedMessage)
-    })
-
+      console.log("order", parsedMessage);
+      updateProduct_OrderItem(parsedMessage);
+    });
   } catch (error) {
-    console.error('Failed to initialize RabbitMQ:', error.message);
+    console.error("Failed to initialize RabbitMQ:", error.message);
     process.exit(1); // Exit if RabbitMQ fails
   }
 })();
 
 // Initialize DB Connection
 
-db.sequelize.sync().then(function(){
+db.sequelize.sync().then(function () {
   console.log("Database Connected");
-})
+});
 
-
-
-app.get('/', (req,res)=>{
+app.get("/", (req, res) => {
   console.log("product");
   res.status(200).json({"service":"product"})
 });
