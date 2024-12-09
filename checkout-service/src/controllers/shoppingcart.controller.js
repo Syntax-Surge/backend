@@ -72,7 +72,7 @@ const removeCart = asyncHandler(async (req, res) => {
 // Get Cart
 const getCart = asyncHandler(async (req, res) => {
   const { userId } = req.params;
-
+  console.log(req.user);
   if (!userId) {
     res.status(400).json({ message: "Missing user ID!" });
     return;

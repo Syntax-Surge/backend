@@ -14,8 +14,12 @@ const cookieParser = require('cookie-parser');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors()); 
-app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3001", // Allow only this origin
+    credentials: true, // Allow cookies and other credentials
+  })
+);app.use(cookieParser());
 
 // Configure Redis client
 const redisClient = redis.createClient({

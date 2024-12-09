@@ -73,14 +73,14 @@ const paymentRoute=require("./routes/payment");
 
 const orderRoutes=require("./routers/orderRoutes");
 
-app.use('/api/payment', paymentRoute);
+app.use('/payment', paymentRoute);
 // app.use('/api/orderConfirmation', orderConfirmationRoute);
 
 const cartRouter = require("./routes/shoppingCart.route");
 const { notFoundHandler, errorHandler } = require('./utils/errorHandler');
 
 // api endpoints
-app.use("/api/cart/", cartRouter);
+app.use("/cart", cartRouter);
 
 
 // Use the Not Found Handler
