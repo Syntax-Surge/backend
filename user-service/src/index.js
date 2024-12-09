@@ -8,6 +8,7 @@ const passport = require('passport');
 var session = require('express-session');
 const db = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const {RedisStore} = require("connect-redis")
 const redis = require('redis');
 const cookieParser = require('cookie-parser');
@@ -112,7 +113,7 @@ db.sequelize.sync().then(function () {});
 
 
 const authRoutes = require('./routes/auth routes/authRoutes');
-const adminRoutes = require('./routes/auth routes/adminAuthRoutes');
+// const adminRoutes = require('./routes/auth routes/adminAuthRoutes');
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
 const apiErrorHandler = require('./middlewares/apiErrorHandler');
 const { checkAuthentication } = require('./middlewares/auth');
