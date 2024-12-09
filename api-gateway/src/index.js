@@ -124,6 +124,7 @@ app.use(
     app.use(
       '/api/v1/users/profile/user',
       limiter,
+      checkAuthentication,
       createProxyMiddleware({
         target: `${USER_SERVICE}/profile/user`,
         changeOrigin: true,
@@ -143,6 +144,44 @@ app.use(
         // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
       })
     );
+
+    //////Protected User Routes For Reviews
+    app.use(
+      '/api/v1/products/reviews/user',
+      limiter,
+      checkAuthentication,
+      createProxyMiddleware({
+        target: `${PRODUCTS_SERVICE}/user`,
+        changeOrigin: true,
+        // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+      })
+    );
+
+    //////Protected User Routes For Products
+    app.use(
+      '/api/v1/products/products/user',
+      limiter,
+      checkAuthentication,
+      createProxyMiddleware({
+        target: `${PRODUCTS_SERVICE}/user`,
+        changeOrigin: true,
+        // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+      })
+    );
+
+    //////Protected User Routes For Categories
+    app.use(
+      '/api/v1/products/categories/user',
+      limiter,
+      checkAuthentication,
+      createProxyMiddleware({
+        target: `${PRODUCTS_SERVICE}/user`,
+        changeOrigin: true,
+        // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+      })
+    );
+
+    
 
     
 

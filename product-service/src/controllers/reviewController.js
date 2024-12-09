@@ -62,6 +62,51 @@ const createReview = asyncHandler(async (req, res) => {
     }
 });
 
+
+
+const updateReview = asyncHandler(async (req, res) => {
+    console.log("Create Review");
+    const { userId, productId, rating, description } = req.body;
+
+    if (!userId || !productId || !rating ) {
+        res.status(400).send({ message: "Missing required fields!" });
+        return;
+    }
+
+    try {
+        const review = {
+            userId,
+            productId,
+            rating,
+            description
+        };
+
+        // const data = await Review.create(review);
+
+        const data = await Review.update(
+            review
+            , {
+                where: [{
+                    userId: userId
+                }, {
+                    productId:productId
+                }]
+            })
+
+
+        res.status(201).json(data);
+    } catch (error) {
+        console.error("Error creating reviews:", error);
+        res.status(500);
+        throw new Error(error.message || "Some error occurred while creating the Review.");
+    }
+});
+
+
+
+
+
+
 const getReviewsForUser = asyncHandler(async (req, res) => { 
     const userId = req.query.userId;
     const productId = req.query.productId;
@@ -90,4 +135,4 @@ const getReviewsForUser = asyncHandler(async (req, res) => {
 
 
 
-module.exports = { getReviews, createReview, getReviewsForUser };
+module.exports = { getReviews, createReview, getReviewsForUser, updateReview };
