@@ -110,7 +110,7 @@ db.sequelize.sync().then(function () {});
 
 
 app.use(cors({
-  origin: 'http://localhost:3001', // Allow only this origin
+  origin: ['http://localhost:3001','http://localhost:3000'], // Allow only this origin
   credentials: true // Allow cookies and other credentials
 }));
 
