@@ -15,7 +15,7 @@ const cookieParser = require('cookie-parser');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000" ] ,credentials: true} )); 
+// app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000" ] ,credentials: true} )); 
 app.use(cookieParser());
 
 // Configure Redis client
@@ -110,7 +110,7 @@ db.sequelize.sync().then(function () {});
 
 
 app.use(cors({
-  origin: ['http://localhost:3001','http://localhost:3000'], // Allow only this origin
+  origin: ['http://localhost:3001','http://localhost:3000' , 'http://localhost:3002'], // Allow only this origin
   credentials: true // Allow cookies and other credentials
 }));
 
