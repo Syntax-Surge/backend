@@ -9,7 +9,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors()); 
+app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000","http://localhost:3002" ] ,credentials: true} )); 
 
 
 (async () => {
@@ -71,17 +71,18 @@ db.sequelize.sync().then(function () {
 const paymentRoute=require("./routes/payment");
 // const orderConfirmationRoute=require("./routers/orderConfirmationRoute")
 
-const orderRoutes=require("./routers/orderRoutes");
+const orderRoutes=require("./routes/orderRoutes");
 
-app.use('/api/payment', paymentRoute);
+app.use('/payment', paymentRoute);
 // app.use('/api/orderConfirmation', orderConfirmationRoute);
 
 const cartRouter = require("./routes/shoppingCart.route");
 const { notFoundHandler, errorHandler } = require('./utils/errorHandler');
 
 // api endpoints
-app.use("/api/cart/", cartRouter);
+app.use("/cart", cartRouter);
 
+app.use('/orders', orderRoutes);
 
 // Use the Not Found Handler
 app.use(notFoundHandler);

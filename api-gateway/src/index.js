@@ -14,7 +14,7 @@ const app = express();
 const cache = new NodeCache({ stdTTL: 60 });
 
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000","http://localhost:3002" ] ,credentials: true} ));
 app.use(helmet());
 app.disable("x-powered-by");
 
@@ -113,9 +113,34 @@ app.get('/', (req,res)=>{
       createProxyMiddleware({
         target: `${USER_SERVICE}/user`,
         changeOrigin: true,
-        pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+        // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
       })
     );
+
+    app.use(
+      '/api/v1/users/profile/user',
+      limiter,
+      createProxyMiddleware({
+        target: `${USER_SERVICE}/profile/user`,
+        changeOrigin: true,
+      })
+    );
+
+    
+    
+    // Protected Admin Routes (Authentication Needed)
+    app.use(
+      '/api/v1/users/profile/admin',
+      limiter,
+      checkAuthentication,
+      createProxyMiddleware({
+        target: `${USER_SERVICE}/profile/admin`,
+        changeOrigin: true,
+        // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+      })
+    );
+
+    
 
 app.use('/api/v1/users', limiter, createProxyMiddleware({ 
   target: USER_SERVICE, 
@@ -123,7 +148,7 @@ app.use('/api/v1/users', limiter, createProxyMiddleware({
 }));
 
 app.use('/api/v1/products',limiter, createProxyMiddleware({ target: PRODUCTS_SERVICE, changeOrigin: true }));
-app.use('/api/v1/orders',limiter, createProxyMiddleware({ target: ORDER_SERVICE, changeOrigin: true }));
+app.use('/api/v1/orders',limiter,checkAuthentication, createProxyMiddleware({ target: ORDER_SERVICE, changeOrigin: true }));
 
 
 // Error handling middleware

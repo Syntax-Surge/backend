@@ -15,7 +15,7 @@ const filter = async (req, res) => {
       if (maxWeight) conditions[Op.and].push({ unitWeight: { [Op.lte]: parseFloat(maxWeight) } });
       // if (categoryId) conditions[Op.and].push({ categoryId: parseInt(categoryId) });
 
-      const products = await Product.findAll({
+      const products = await Product.findAndCountAll({
           where: conditions,
           include: [
               {

@@ -8,13 +8,14 @@ const passport = require('passport');
 var session = require('express-session');
 const db = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
+const userAdminRoutes = require('./routes/userAdminRoutes');
 const {RedisStore} = require("connect-redis")
 const redis = require('redis');
 const cookieParser = require('cookie-parser');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors()); 
+app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000","http://localhost:3002" ] ,credentials: true} )); 
 app.use(cookieParser());
 
 // Configure Redis client
@@ -108,11 +109,14 @@ const PORT = process.env.PORT || 3003;
 db.sequelize.sync().then(function () {});
 
 
-
+app.use(cors({
+  origin: ['http://localhost:3001','http://localhost:3000'], // Allow only this origin
+  credentials: true // Allow cookies and other credentials
+}));
 
 
 const authRoutes = require('./routes/auth routes/authRoutes');
-const adminRoutes = require('./routes/auth routes/adminAuthRoutes');
+// const adminRoutes = require('./routes/auth routes/adminAuthRoutes');
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
 const apiErrorHandler = require('./middlewares/apiErrorHandler');
 const { checkAuthentication } = require('./middlewares/auth');
@@ -120,7 +124,7 @@ const { checkAuthentication } = require('./middlewares/auth');
 // const db = require('./model');
 
 app.use('/' , authRoutes)
-app.use('/admin' , adminRoutes)
+app.use('/admin' , userAdminRoutes)
 
 // const hashedPaswrd = async() => {
 //   const saltRounds = parseInt(process.env.SALT_ROUNDS) || 12;
@@ -129,7 +133,9 @@ app.use('/admin' , adminRoutes)
 // }
 // hashedPaswrd();
 
-app.use('/api/v1/users', userRoutes);
+app.use('/users', userRoutes);
+app.use('/profile/user', userRoutes);
+// app.use('/profile/admin', userAdminRoutes);
 
 
 
@@ -149,7 +155,7 @@ app.get("/admin/test",(req,res)=>{
   return res.status(200).json({ msg: 'hey admin ' });
 })
 
-app.use('/api/v1/users', userRoutes);
+// app.use('/users', userRoutes);
 // app.use('/api/v1/error',apiErrorHandler, createError);
 
 
@@ -163,3 +169,5 @@ app.use('/api/v1/users', userRoutes);
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);
 });
+
+module.exports = app;

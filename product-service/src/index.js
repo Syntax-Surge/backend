@@ -46,19 +46,21 @@ db.sequelize.sync().then(function(){
 app.get('/', (req,res)=>{
   console.log("product");
   res.status(200).json({"service":"product"})
-  
 });
+
+
 // Other middlewares and routes setup here
 
-app.use('/api/v1/categories', categoryRoutes);
-app.use('/api/v1/products', productOpRoutes);
-app.use('/api/v1/reviews', reviewRoutes);
+app.use('/categories', categoryRoutes);
+app.use('/products', productOpRoutes);
+app.use('/reviews', reviewRoutes);
+
 
 
 const PORT = process.env.PORT || 3004;
 
 if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, '0.0.0.0', () => {
+  app.listen(PORT, () => {
     console.log(`Service running on port ${PORT}`);
   });
 }

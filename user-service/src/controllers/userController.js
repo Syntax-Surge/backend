@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler")
 // const { User } = require("../config/db");
 const db  = require("../config/db")
 const { where } = require("sequelize");
-const {getOrderItemsById} = require("../grpc/orderClient")
+const {getOrderItemsById, getAllOrderItems} = require("../grpc/orderClient")
 
 const User=db.users;
 const Address=db.Address;
@@ -17,7 +17,8 @@ const getAllUsers = asyncHandler(async (req, res) => {
         const users = await User.findAndCountAll({
             limit: limit,
             offset: offset,
-            order: [['createdAt', 'DESC']]
+            order: [['createdAt', 'DESC']],
+            attributes: ['id', 'firstName', 'lastName','email', 'contactNo', 'profileImage'],
         })
         res.status(200).json(users);
     } catch (error) {
@@ -81,6 +82,44 @@ const updateUser = asyncHandler(async (req, res) => {
         throw new Error(error.message || "Unable to update user");
     }
 });
+
+
+
+const updateUserProfile = asyncHandler(async (req, res) => {
+
+
+    const data = req.body;
+    const id = req.query.id;
+    console.log("------");
+    
+    console.log(data);
+    console.log(id);
+    const imageUrlString = data.imageUrl;
+    console.log(imageUrlString);
+    
+    // let updateFields = {};
+    // if (data.updateFirstName) updateFields.firstName = data.updateFirstName;
+    // if (data.updateLastName) updateFields.lastName = data.updateLastName;
+    // if (data.updateEmail) updateFields.email = data.updateEmail;
+    // if (data.updateNewPassword) updateFields.password = data.updateNewPassword;
+    // if (data.contactNo) updateFields.contactNo = data.contactNo;
+    // if (data.profileImage) updateFields.profileImage = data.profileImage;
+    try {
+        const updateUserProfile = await User.update(
+            {profileImage: imageUrlString}
+            , {
+                where: {
+                    id: id
+                }
+            })
+        res.status(200).json(updateUserProfile);
+    } catch (error) {
+        res.status(400);
+        throw new Error(error.message || "Unable to update user");
+    }
+});
+
+
 
 // const createBillingAddress = asyncHandler(async (req, res) => {
 //     const data = req.params.data;
@@ -221,7 +260,7 @@ const updateShippingAddress = asyncHandler(async (req, res) => {
 const getUserOrder = async (req, res) => {
     const userId = req.query.id; // Extract user ID from route params
     // const userId = 1;
-
+    console.log("hello ",userId);
     if (isNaN(userId)) {
         return res.status(400).json({ error: "Invalid user ID" });
     }
@@ -231,6 +270,17 @@ const getUserOrder = async (req, res) => {
         res.json(orderItem); // Send the gRPC response as JSON
     } catch (error) {
         console.error("Error calling getOrderItemsById:", error);
+        res.status(500).json({ error: error.details || "Internal server error" });
+    }
+};
+
+const getAllUserOrderItems = async (req, res) => {
+
+    try {
+        const orderItem = await getAllOrderItems(); // Call gRPC function
+        res.json(orderItem); // Send the gRPC response as JSON
+    } catch (error) {
+        console.error("Error calling getAllOrderItems:", error);
         res.status(500).json({ error: error.details || "Internal server error" });
     }
 };
@@ -261,7 +311,7 @@ const createError = asyncHandler(async (req, res) => {
 
 });
 
-module.exports = { getAllUsers, createError, updateUser, getUserByID, getAll, createShippingAddress, updateShippingAddress, getUserOrder, getAddressByID };
+module.exports = { getAllUsers, createError, updateUser, getUserByID, getAll, createShippingAddress, updateShippingAddress, getUserOrder, getAddressByID, updateUserProfile, getAllUserOrderItems };
 
 
 
