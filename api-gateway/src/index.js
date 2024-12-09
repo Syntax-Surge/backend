@@ -141,6 +141,44 @@ app.get('/', (req,res)=>{
       })
     );
 
+    //////Protected User Routes For Reviews
+    app.use(
+      '/api/v1/products/reviews/user',
+      limiter,
+      checkAuthentication,
+      createProxyMiddleware({
+        target: `${PRODUCTS_SERVICE}/user`,
+        changeOrigin: true,
+        // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+      })
+    );
+
+    //////Protected User Routes For Products
+    app.use(
+      '/api/v1/products/products/user',
+      limiter,
+      checkAuthentication,
+      createProxyMiddleware({
+        target: `${PRODUCTS_SERVICE}/user`,
+        changeOrigin: true,
+        // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+      })
+    );
+
+    //////Protected User Routes For Categories
+    app.use(
+      '/api/v1/products/categories/user',
+      limiter,
+      checkAuthentication,
+      createProxyMiddleware({
+        target: `${PRODUCTS_SERVICE}/user`,
+        changeOrigin: true,
+        // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+      })
+    );
+
+    
+
     
 
 app.use('/api/v1/users', limiter, createProxyMiddleware({ 
