@@ -43,8 +43,16 @@ const getAll = asyncHandler(async (req, res) => {
     }
 });
 
-const getUserByID = asyncHandler(async (req, res) => {
-    const id = req.query.id;
+const getUserByID = asyncHandler(async (req, res) => { 
+
+    const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+    console.log(user,"user");
+    const id = user.id;
+
+
+    // const id = req.query.id;
+
+
     try {
         const user = await User.findByPk(id)
         res.status(200).json(user);
@@ -57,8 +65,13 @@ const getUserByID = asyncHandler(async (req, res) => {
 const updateUser = asyncHandler(async (req, res) => {
 
 
+    const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+    console.log(user,"user");
+    const id = user.id;
+
+
     const data = req.body;
-    const id = req.query.id;
+    // const id = req.query.id;
     console.log(data);
     console.log(id);
     let updateFields = {};
@@ -87,9 +100,13 @@ const updateUser = asyncHandler(async (req, res) => {
 
 const updateUserProfile = asyncHandler(async (req, res) => {
 
+    const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+    console.log(user,"user");
+    const id = user.id;
+
 
     const data = req.body;
-    const id = req.query.id;
+    // const id = req.query.id;
     console.log("------");
     
     console.log(data);
@@ -149,8 +166,14 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // });
 
 const createShippingAddress = asyncHandler(async (req, res) => {
+
+    const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+    console.log(user,"user");
+    const id = user.id;
+
+
     const data = req.body;
-    const id = req.query.id;
+    // const id = req.query.id;
     console.log(data);
     console.log(id);
     let shippingAddress = {};
@@ -204,8 +227,14 @@ const updateBillingAddress = asyncHandler(async (req, res) => {
 
 
 const updateShippingAddress = asyncHandler(async (req, res) => {
+
+    const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+    console.log(user,"user");
+    const id = user.id;
+
+
     const data = req.body;
-    const id = req.query.id;
+    // const id = req.query.id;
     // console.log(data);
     // console.log(id);
     let shippingAddress = {};
@@ -258,7 +287,13 @@ const updateShippingAddress = asyncHandler(async (req, res) => {
 
 // Define route to call gRPC function
 const getUserOrder = async (req, res) => {
-    const userId = req.query.id; // Extract user ID from route params
+
+    const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+    console.log(user,"user");
+    const userId = user.id;
+
+    
+    // const userId = req.query.id;
     // const userId = 1;
     console.log("hello ",userId);
     if (isNaN(userId)) {
@@ -286,7 +321,13 @@ const getAllUserOrderItems = async (req, res) => {
 };
 
 const getAddressByID = asyncHandler(async (req, res) => {
-    const id = req.query.id;
+
+    const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+    console.log(user,"user");
+    const id = user.id;
+
+
+    // const id = req.query.id;
     try {
         const address = await Address.findOne({ where: { userId: id } });
         res.status(200).json(address);
