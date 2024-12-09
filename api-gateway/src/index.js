@@ -14,7 +14,7 @@ const app = express();
 const cache = new NodeCache({ stdTTL: 60 });
 
 app.use(cookieParser());
-app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000" ] ,credentials: true} ));
+app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000","http://localhost:3002" ] ,credentials: true} ));
 app.use(helmet());
 app.disable("x-powered-by");
 
@@ -148,7 +148,7 @@ app.use('/api/v1/users', limiter, createProxyMiddleware({
 }));
 
 app.use('/api/v1/products',limiter, createProxyMiddleware({ target: PRODUCTS_SERVICE, changeOrigin: true }));
-app.use('/api/v1/orders',limiter, createProxyMiddleware({ target: ORDER_SERVICE, changeOrigin: true }));
+app.use('/api/v1/orders',limiter,checkAuthentication, createProxyMiddleware({ target: ORDER_SERVICE, changeOrigin: true }));
 
 
 // Error handling middleware
