@@ -9,6 +9,7 @@ var LocalStrategy = require('passport-local');
 const { User } = require("../../config/db");
 require('../../controllers/auth/strategies')
 
+
 //sign up user manually
 router.post('/signUp' , signUpUser)
 
@@ -77,7 +78,21 @@ router.post('/login', (req, res, next) => {
               return res.status(500).json({msg : 'Login error'});
           }
 
+          //  redirectUrl.searchParams.set("userId", user.id); // Replace with relevant user properties
+          //  redirectUrl.searchParams.set("username", user.name); // Example
+          //  console.log('redirectUrl.toString() :', redirectUrl.toString() )
+  
+             // Set a cookie with user data (e.g., userId, username)
+          const cook = res.cookie("user", JSON.stringify({ userId: user.id, username: user.name }), {
+            httpOnly: false, // Prevents client-side JS access for security
+            secure: true, // Only send over HTTPS
+            sameSite: "strict", // Prevents CSRF
+            maxAge : 1000 * 60 * 5 , 
+          });
+          console.log('cook ', cook)
           // Successful login
+
+          // res.redirect("http://localhost:3001");
           return res.status(200).json({msg : 'Login successful',user : req.user });
       });
   })(req, res, next);
@@ -107,8 +122,23 @@ router.get(
         if (loginErr) {
           return res.status(500).json({ msg: 'Login error', error: loginErr.message });
         }
-        // Successful login
-        res.redirect("http://localhost:3001/"); // Adjust as needed
+         // Construct a redirect URL with user details as query parameters
+        // console.log('user :', user);
+         const redirectUrl = new URL("http://localhost:3001/");
+        //  redirectUrl.searchParams.set("userId", user.id); // Replace with relevant user properties
+        //  redirectUrl.searchParams.set("username", user.name); // Example
+        //  console.log('redirectUrl.toString() :', redirectUrl.toString() )
+
+           // Set a cookie with user data (e.g., userId, username)
+        const cook = res.cookie("user", JSON.stringify({ userId: user.id, username: user.name }), {
+          httpOnly: false, // Prevents client-side JS access for security
+          secure: true, // Only send over HTTPS
+          sameSite: "strict", // Prevents CSRF
+          maxAge : 1000 * 60 * 5 , 
+        });
+        console.log('cook ', cook)
+         res.redirect(redirectUrl.toString());
+        //  res.status(200).json({ redirectUrl: "http://localhost:3001/" });
       });
     })(req, res, next);
   }
@@ -136,8 +166,18 @@ router.get(
           return res.status(500).json({msg : 'Login error',loginErr});
         }
   
+
+        const cook = res.cookie("user", JSON.stringify({ userId: user.id, username: user.name }), {
+          httpOnly: false, // Prevents client-side JS access for security
+          secure: true, // Only send over HTTPS
+          sameSite: "strict", // Prevents CSRF
+          maxAge : 1000 * 60 * 5 , 
+        });
+        console.log('cook ', cook)
         // Successful login, send user information
-        return res.status(200).json({msg : 'Login successful', user });
+        res.redirect("http://localhost:3001/");
+
+        // return res.status(200).json({msg : 'Login successful', user });
 
         // res.redirect("http://localhost:3000/");
       });
@@ -157,6 +197,15 @@ router.post('/logout',   checkAuthentication,  async (req, res, next) => {
     
     if (!req.cookies || !req.cookies['connect.sid']) {
       return res.status(400).json({ msg: 'Session cookie not found' });
+    }
+    if (!req.cookies || !req.cookies['user']) {
+      res.clearCookie('user', {
+        httpOnly: false, // Should match the original cookie settings
+        secure: true, // Should match the original cookie settings
+        sameSite: "strict", // Should match the original cookie settings
+      });
+      console.log("User cookie cleared.");
+      // return res.status(400).json({ msg: 'Session cookie not found' });
     }
     
     // Check if the user is authenticated before attempting to log out

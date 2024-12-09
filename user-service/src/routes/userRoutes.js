@@ -10,7 +10,7 @@ router.get('/' , getAllUsers);
 // router.get('/createError', createError);
 router.get('/getUserByID' , getUserByID);
 router.get('/getAll', getAll);
-router.post('/updateUser', updateUser);
+router.post('/profile/user/updateUser', updateUser);
 router.put('/updateshipping', updateShippingAddress);
 router.post('/createAddress',createShippingAddress);
 router.get('/getOrders', getUserOrder);
