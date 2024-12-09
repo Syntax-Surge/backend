@@ -8,6 +8,7 @@ const passport = require('passport');
 var session = require('express-session');
 const db = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
+const userAdminRoutes = require('./routes/userAdminRoutes');
 const {RedisStore} = require("connect-redis")
 const redis = require('redis');
 const cookieParser = require('cookie-parser');
@@ -108,7 +109,10 @@ const PORT = process.env.PORT || 3003;
 db.sequelize.sync().then(function () {});
 
 
-
+app.use(cors({
+  origin: 'http://localhost:3001', // Allow only this origin
+  credentials: true // Allow cookies and other credentials
+}));
 
 
 const authRoutes = require('./routes/auth routes/authRoutes');
@@ -129,7 +133,9 @@ app.use('/admin' , adminRoutes)
 // }
 // hashedPaswrd();
 
-app.use('/api/v1/users', userRoutes);
+app.use('/users', userRoutes);
+app.use('/profile/user', userRoutes);
+// app.use('/profile/admin', userAdminRoutes);
 
 
 
@@ -149,7 +155,7 @@ app.get("/admin/test",(req,res)=>{
   return res.status(200).json({ msg: 'hey admin ' });
 })
 
-app.use('/api/v1/users', userRoutes);
+// app.use('/users', userRoutes);
 // app.use('/api/v1/error',apiErrorHandler, createError);
 
 
@@ -163,3 +169,5 @@ app.use('/api/v1/users', userRoutes);
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);
 });
+
+module.exports = app;

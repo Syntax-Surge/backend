@@ -9,7 +9,7 @@ const orderItemsProto = grpc.loadPackageDefinition(packageDefinition).orderItems
 
 // Create a client instance
 const client = new orderItemsProto.UserService(
-    'localhost:50057', 
+    'localhost:50053', 
     grpc.credentials.createInsecure()
 );
 
@@ -30,6 +30,22 @@ const getOrderItemsById = (id) => {
     });
 };
 
+const getAllOrderItems = () => {
+    return new Promise((resolve, reject) => {
+        client.GetAllOrderItems({  }, (error, response) => {
+            if (error) {
+                console.error("Error");
+                reject(error);
+            } else {
+                console.log(response);
+                
+                resolve(response);
+            }
+        });
+    });
+};
+
 module.exports = {
     getOrderItemsById,
+    getAllOrderItems
 };
