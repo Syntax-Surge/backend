@@ -6,8 +6,8 @@ const browseByCategory = require("../controllers/browseByCategory/browseByCatego
 
 router.get('/' , getCategories)
 router.post('/' , createCategory)
-router.put('/:id' , updateCategory)
-router.delete('/:id', deleteCategory)
+router.put('/admin/:id' , updateCategory)
+router.delete('/admin/:id', deleteCategory)
 router.get('/subCategories' , getSubCategories)
 router.post('/uploadCategoryImage', upload.single('image'), uploadCategoryImage);
 

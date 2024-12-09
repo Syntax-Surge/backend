@@ -71,7 +71,7 @@ db.sequelize.sync().then(function () {
 const paymentRoute=require("./routes/payment");
 // const orderConfirmationRoute=require("./routers/orderConfirmationRoute")
 
-const orderRoutes=require("./routers/orderRoutes");
+const orderRoutes=require("./routes/orderRoutes");
 
 app.use('/payment', paymentRoute);
 // app.use('/api/orderConfirmation', orderConfirmationRoute);
@@ -82,6 +82,7 @@ const { notFoundHandler, errorHandler } = require('./utils/errorHandler');
 // api endpoints
 app.use("/cart", cartRouter);
 
+app.use('/orders', orderRoutes);
 
 // Use the Not Found Handler
 app.use(notFoundHandler);

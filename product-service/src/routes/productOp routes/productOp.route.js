@@ -11,9 +11,9 @@ router.get('/search',search);
 router.get('/filter',filter);
 router.get('/' , getProducts);
 router.get('/:id' , getProduct);
-router.post('/' , createProduct);
-router.put('/:id' , updateProduct);
-router.delete('/:id', deleteProduct);
+router.post('/admin' , createProduct);
+router.put('/admin/:id' , updateProduct);
+router.delete('/admin/:id', deleteProduct);
 // tempory
 // router.delete('/:id', getReview);
 router.post('/uploadProductImage', upload.single('image'), uploadProductImage);
