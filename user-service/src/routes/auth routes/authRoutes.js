@@ -29,8 +29,8 @@ passport.use(new LocalStrategy(
 
       const isMatched = await bcrypt.compare(password, user.password);
       if (!isMatched) return cb(null, false, { message: 'Incorrect password' });
-      user.role="user";
-      const { password: _, ...userData } = user;
+      // user.role="user";
+      const userData={"id":user.dataValues.id,"email":user.dataValues.email,"role":"user"}
       return cb(null, userData);
     } catch (err) {
       return cb(err);
@@ -40,7 +40,7 @@ passport.use(new LocalStrategy(
 
 passport.serializeUser(function (user, cb) {                //serialize(send user details to create session) user
   process.nextTick(function () {
-    cb(null, { id: user.userId, email: user.email, name: user.name,role:user.role });
+    cb(null, { id: user.userId, email: user.email, name: user.name });
   });
 });
 
@@ -78,7 +78,21 @@ router.post('/login', (req, res, next) => {
               return res.status(500).json({msg : 'Login error'});
           }
 
+          //  redirectUrl.searchParams.set("userId", user.id); // Replace with relevant user properties
+          //  redirectUrl.searchParams.set("username", user.name); // Example
+          //  console.log('redirectUrl.toString() :', redirectUrl.toString() )
+  
+             // Set a cookie with user data (e.g., userId, username)
+          const cook = res.cookie("user", JSON.stringify({ userId: user.id, username: user.name }), {
+            httpOnly: false, // Prevents client-side JS access for security
+            secure: true, // Only send over HTTPS
+            sameSite: "strict", // Prevents CSRF
+            maxAge : 1000 * 60 * 5 , 
+          });
+          console.log('cook ', cook)
           // Successful login
+
+          // res.redirect("http://localhost:3001");
           return res.status(200).json({msg : 'Login successful',user : req.user });
       });
   })(req, res, next);
@@ -152,8 +166,18 @@ router.get(
           return res.status(500).json({msg : 'Login error',loginErr});
         }
   
+
+        const cook = res.cookie("user", JSON.stringify({ userId: user.id, username: user.name }), {
+          httpOnly: false, // Prevents client-side JS access for security
+          secure: true, // Only send over HTTPS
+          sameSite: "strict", // Prevents CSRF
+          maxAge : 1000 * 60 * 5 , 
+        });
+        console.log('cook ', cook)
         // Successful login, send user information
-        return res.status(200).json({msg : 'Login successful', user });
+        res.redirect("http://localhost:3001/");
+
+        // return res.status(200).json({msg : 'Login successful', user });
 
         // res.redirect("http://localhost:3000/");
       });

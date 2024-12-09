@@ -7,6 +7,7 @@ var router = express.Router();
 require('../../controllers/auth/admin/strategies');
 
 router.post('/login',  (req, res, next) => {
+  
     passport.authenticate('admin-local', (err, user, info) => {
         if (err) {
             // Handle any errors that might occur
@@ -23,7 +24,13 @@ router.post('/login',  (req, res, next) => {
             if (err) {
                 return res.status(500).json({msg : 'Login error'});
             }
-  
+            const cook = res.cookie("user", JSON.stringify({ userId: user.id, username: user.name }), {
+              httpOnly: false, // Prevents client-side JS access for security
+              secure: true, // Only send over HTTPS
+              sameSite: "strict", // Prevents CSRF
+              maxAge : 1000 * 60 * 5 , 
+            });
+            console.log('cook ', cook)
             // Successful login
             return res.status(200).json({msg : 'Login successful',user });
         });

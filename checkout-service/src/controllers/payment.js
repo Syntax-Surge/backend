@@ -2,17 +2,19 @@ const db = require('../config/db');
 const crypto = require('crypto');
 const { publishToQueue } = require('../config/rabbitmq');
 const { Sequelize } = require('sequelize');
+const { getProductById } = require('../grpc/productClient');
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const asyncHandler = require("express-async-handler")
 
 const Orders = db.orders;
 const OrderItems = db.orderItems;
 const Payments = db.payments;
 
-exports.createPaymentIntent=async (req, res) => {
+exports.createPaymentIntent=asyncHandler(async (req, res) => {
     const { total, customer, shipping,items } = req.body;
 
     try {
-      console.log("kkkk");
+  
       
     //   console.log("request",req.body.product,req.body.customer,req.body.shipping);
   
@@ -41,12 +43,39 @@ exports.createPaymentIntent=async (req, res) => {
         status: shipping.status,
       });
       
-      console.log("hh",newOrder);
-      const orderItems = items.map((item) => ({
-        orderId: newOrder.id,
-        productId: item.productId,
-        quantity: item.quantity || 1,
-      }));
+      console.log(items);
+      // const orderItems = items.map((item) => ({
+      //   orderId: newOrder.id,
+      //   productId: item.productId,
+      //   quantity: item.quantity || 1,
+      // }));
+
+      const orderItems = [];
+      for (const item of items) {
+        const product = await getProductById(item.productId); // Ensure this is an async function
+        if (!product) {
+          return res.status(404).json({
+            success: false,
+            message: `Product with ID ${item.productId} not found.`,
+          });
+        }
+      console.log(product);
+  
+        if (product.availableQuantity < item.quantity) {
+          return res.status(400).json({
+            success: false,
+            message: `Insufficient stock for product  ${product.productName}.`,
+          });
+        }
+  
+        orderItems.push({
+          orderId: newOrder.id,
+          productId: item.productId,
+          quantity: item.quantity || 1,
+        });
+  
+
+      }
        
       // Bulk insert order items
       await OrderItems.bulkCreate(orderItems);
@@ -68,7 +97,7 @@ exports.createPaymentIntent=async (req, res) => {
       );
 
 
-      res.send({
+      res.status(201).send({
         clientSecret: paymentIntent.client_secret,
         orderId: newOrder.id,
       });
@@ -82,7 +111,7 @@ exports.createPaymentIntent=async (req, res) => {
       error: e.message,
     });
     }
-  }
+  })
 
 
 //  exports.confirmPayment= async (req, res) => {
@@ -124,7 +153,7 @@ exports.createPaymentIntent=async (req, res) => {
 //     }
 //   };
 
-exports.confirmPayment = async (req, res) => {
+exports.confirmPayment = asyncHandler(async (req, res) => {
     const { paymentIntent, orderId } = req.body;
   
 
@@ -151,6 +180,8 @@ exports.confirmPayment = async (req, res) => {
             amount: retrievedPaymentIntent.amount,
           },// Pass transaction to ensure atomicity
         );
+
+
   
         // Update the order's status to 'in_progress'
         await Orders.update(
@@ -159,9 +190,18 @@ exports.confirmPayment = async (req, res) => {
             where: { id: retrievedPaymentIntent.metadata.order_id },// Pass transaction to ensure atomicity
           }
         );
+
+        const orderItems = await OrderItems.findAll({
+          where: { orderId: retrievedPaymentIntent.metadata.order_id },
+      });
+      
+      console.log(orderItems);
+      
+      // Extract only the productId values
+      const products = orderItems.map(item => ({"productId":item.productId, "quantity":item.quantity}));
   
         // Publish a message to the queue
-        publishToQueue("product", "minus one");
+        publishToQueue("order_product",products);
   
 
   
@@ -181,4 +221,4 @@ exports.confirmPayment = async (req, res) => {
         error: e.message,
       });
     }
-  };
+  })
