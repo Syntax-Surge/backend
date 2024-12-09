@@ -12,3 +12,8 @@
 2024-11-20T17:03:21.718Z [[32minfo[39m]: API Gateway running on port 3002
 2024-11-29T16:51:00.407Z [[32minfo[39m]: API Gateway running on port 3002
 2024-12-08T21:05:54.006Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T21:23:02.407Z [[32minfo[39m]: API Gateway running on port 3002
+2024-12-08T21:24:13.125Z [[32minfo[39m]: Request - Method: POST, URL: /api/v1/users/admin/login, IP: ::1
+2024-12-08T21:26:42.477Z [[32minfo[39m]: Request - Method: POST, URL: /api/v1/users/admin/login, IP: ::1
+2024-12-08T21:27:33.314Z [[32minfo[39m]: Request - Method: POST, URL: /api/v1/users/login, IP: ::1
+2024-12-08T21:27:58.651Z [[32minfo[39m]: Request - Method: POST, URL: /api/v1/users/login, IP: ::1

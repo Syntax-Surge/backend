@@ -5,12 +5,17 @@ const NodeCache = require('node-cache');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const helmet = require('helmet');
 const logger = require('./logger');
-
+const { redisClient, isRedisConnected } = require('./utils/redis');
+const cookieParser = require('cookie-parser');
+const rateLimit = require('express-rate-limit');
+const { checkAuthentication, checkAdminAuthentication } = require('./utils/middlewares');
 
 const app = express();
 const cache = new NodeCache({ stdTTL: 60 });
 
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000" ] ,credentials: true} )); 
+
 app.use(helmet());
 app.disable("x-powered-by");
 
@@ -35,8 +40,8 @@ app.use((req, res, next) => {
 
 
 const PRODUCTS_SERVICE = 'http://localhost:3004';
-const CHECKOUT_SERVICE = 'http://localhost:3003';
-const PAYMENTS_SERVICE = 'http://localhost:8003';
+const ORDER_SERVICE = 'http://localhost:3005';
+const USER_SERVICE = 'http://localhost:3003';
 
 
 // load balancing
@@ -57,26 +62,70 @@ const PAYMENTS_SERVICE = 'http://localhost:8003';
 
 //rate limiting
 
-const rateLimit = require('express-rate-limit');
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // Limit each IP to 100 requests per windowMs
 });
 
-
-app.use('/api/products',limiter, createProxyMiddleware({ target: PRODUCTS_SERVICE, changeOrigin: true }));
-
-app.use('/api/checkouts',limiter, createProxyMiddleware({ target: CHECKOUT_SERVICE, changeOrigin: true }));
-app.use('/api/payments',limiter, createProxyMiddleware({ target: PAYMENTS_SERVICE, changeOrigin: true }));
-
-
-
+// test
 app.get('/', (req,res)=>{
   console.log("api gateway");
-  res.status(200).json({"service":"api gateway"})
-  
+  res.status(200).json({"service":"api gateway"}) 
 });
+
+// user routing
+// Public Admin Routes (No Authentication Needed)
+  app.use(
+    '/api/v1/users/admin/login',
+    limiter,
+    createProxyMiddleware({
+      target: `${USER_SERVICE}/admin/login`,
+      changeOrigin: true,
+    })
+  );
+  
+  // Protected Admin Routes (Authentication Needed)
+  app.use(
+    '/api/v1/users/admin',
+    limiter,
+    checkAdminAuthentication,
+    createProxyMiddleware({
+      target: `${USER_SERVICE}/admin`,
+      changeOrigin: true,
+    })
+  );
+
+    // Public Admin Routes (No Authentication Needed)
+    app.use(
+      '/api/v1/users/user/login',
+      limiter,
+      createProxyMiddleware({
+        target: `${USER_SERVICE}/user/login`,
+        changeOrigin: true,
+      })
+    );
+    
+    // Protected Admin Routes (Authentication Needed)
+    app.use(
+      '/api/v1/users/user',
+      limiter,
+      checkAuthentication,
+      createProxyMiddleware({
+        target: `${USER_SERVICE}/user`,
+        changeOrigin: true,
+        pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+      })
+    );
+
+app.use('/api/v1/users', limiter, createProxyMiddleware({ 
+  target: USER_SERVICE, 
+  changeOrigin: true,
+}));
+
+app.use('/api/v1/products',limiter, createProxyMiddleware({ target: PRODUCTS_SERVICE, changeOrigin: true }));
+app.use('/api/v1/orders',limiter, createProxyMiddleware({ target: ORDER_SERVICE, changeOrigin: true }));
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

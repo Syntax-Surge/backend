@@ -16,7 +16,7 @@ app.use(cors());
   try {
     await connectRabbitMQ();
 
-    publishToQueue("product","minaus one")
+    // publishToQueue("order_product",["ddd","dsdad","minaus one"])
 
   } catch (error) {
     console.error('Failed to initialize RabbitMQ:', error.message);
@@ -71,21 +71,30 @@ db.sequelize.sync().then(function () {
 const paymentRoute=require("./routes/payment");
 // const orderConfirmationRoute=require("./routers/orderConfirmationRoute")
 
-const orderRoutes=require("./routers/orderRoutes");
+const orderRoutes=require("./routes/orderRoutes");
 
-app.use('/api/payment', paymentRoute);
+app.use('/payment', paymentRoute);
 // app.use('/api/orderConfirmation', orderConfirmationRoute);
 
 const cartRouter = require("./routes/shoppingCart.route");
+const { notFoundHandler, errorHandler } = require('./utils/errorHandler');
 
 // api endpoints
-app.use("/api/cart/", cartRouter);
+app.use("/cart", cartRouter);
 
-app.use('/api/v1/orders', orderRoutes);
+app.use('/orders', orderRoutes);
+
+// Use the Not Found Handler
+app.use(notFoundHandler);
+
+// Use the General Error Handler
+app.use(errorHandler);
 
 
-const PORT = process.env.PORT || 3006;
+const PORT = process.env.PORT || 3005;
 
 app.listen(PORT, () => {
   console.log(`Service running on port ${PORT}`);
 });
+
+module.exports = app;
