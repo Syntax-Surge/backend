@@ -114,9 +114,34 @@ app.get('/', (req,res)=>{
       createProxyMiddleware({
         target: `${USER_SERVICE}/user`,
         changeOrigin: true,
-        pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+        // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
       })
     );
+
+    app.use(
+      '/api/v1/users/profile/user',
+      limiter,
+      createProxyMiddleware({
+        target: `${USER_SERVICE}/profile/user`,
+        changeOrigin: true,
+      })
+    );
+
+    
+    
+    // Protected Admin Routes (Authentication Needed)
+    app.use(
+      '/api/v1/users/profile/admin',
+      limiter,
+      checkAuthentication,
+      createProxyMiddleware({
+        target: `${USER_SERVICE}/profile/admin`,
+        changeOrigin: true,
+        // pathRewrite: (path) => path.replace('/api/v1/users/user', ''),
+      })
+    );
+
+    
 
 app.use('/api/v1/users', limiter, createProxyMiddleware({ 
   target: USER_SERVICE, 
