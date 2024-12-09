@@ -5,7 +5,7 @@ exports.checkAuthentication = async (req, res, next) => {
       if (!isRedisConnected()) {
         return res.status(503).json({ msg: 'Redis service unavailable' });
       }
-  console.log(req.cookies,"cokieeee");
+ console.log(req.cookies,"cokieeee");
   
       const sessionCookie = req.cookies['connect.sid'] || req.headers['authorization']; // Use session ID or JWT
       if (!sessionCookie) {
@@ -18,7 +18,7 @@ exports.checkAuthentication = async (req, res, next) => {
       
       const sessionData = await redisClient.get(sessionKey);
 
-      console.log(sessionData);
+      //console.log(sessionData);
   
       if (!sessionData) {
         return res.status(401).json({ msg: 'Unauthorized: Session expired or invalid' });
@@ -29,7 +29,8 @@ exports.checkAuthentication = async (req, res, next) => {
         return res.status(401).json({ msg: 'Unauthorized: User not authenticated' });
       }
   
-      req.user = session.passport.user;
+      req.user =session.passport.user
+      req.headers['x-user'] = JSON.stringify(session.passport.user);
       console.log(req.user);
       
       next();
@@ -57,7 +58,7 @@ exports.checkAuthentication = async (req, res, next) => {
       
       const sessionData = await redisClient.get(sessionKey);
 
-    //   console.log(sessionData);
+      //console.log(sessionData);
   
       if (!sessionData) {
         return res.status(401).json({ msg: 'Unauthorized: Session expired or invalid' });
@@ -67,13 +68,14 @@ exports.checkAuthentication = async (req, res, next) => {
       if (!session.passport || !session.passport.user) {
         return res.status(401).json({ msg: 'Unauthorized: User not authenticated' });
       }
-      console.log(session.passport.user.role,'admin');
+   //   console.log(session.passport.user.role,'admin');
       
       if ((session.passport.user.role) != 'admin') {
         return res.status(403).json({ msg: 'Forbidden: Admin access required' });
       }
   
       req.user = session.passport.user;
+      req.headers['x-user'] = JSON.stringify(session.passport.user);
       console.log(req.user);
       
       next();

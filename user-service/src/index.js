@@ -15,6 +15,8 @@ const cookieParser = require('cookie-parser');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000","http://localhost:3002" ] ,credentials: true} )); 
 // app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000" ] ,credentials: true} )); 
 app.use(cookieParser());
 
@@ -65,7 +67,7 @@ const sessionMiddleware = session({
   cookie: {
     httpOnly: true,
     secure: false, // Set to true in production
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 1 * 60 * 60 * 1000, // 1 hour
   },
 });
 
@@ -116,15 +118,14 @@ app.use(cors({
 
 
 const authRoutes = require('./routes/auth routes/authRoutes');
-// const adminRoutes = require('./routes/auth routes/adminAuthRoutes');
+const adminRoutes = require('./routes/auth routes/adminAuthRoutes');
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
 const apiErrorHandler = require('./middlewares/apiErrorHandler');
 const { checkAuthentication } = require('./middlewares/auth');
 // const { createError } = require('./controllers/userController');
 // const db = require('./model');
-
 app.use('/' , authRoutes)
-app.use('/admin' , userAdminRoutes)
+app.use('/admin' , adminRoutes)
 
 // const hashedPaswrd = async() => {
 //   const saltRounds = parseInt(process.env.SALT_ROUNDS) || 12;

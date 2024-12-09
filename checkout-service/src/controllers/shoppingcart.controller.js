@@ -39,6 +39,7 @@ const addToCart = asyncHandler(async (req, res) => {
       productId,
       quantity,
     });
+console.log(cartItem);
 
     res.status(201).json(cartItem);
   } catch (error) {
