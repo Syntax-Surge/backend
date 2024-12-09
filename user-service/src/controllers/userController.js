@@ -83,6 +83,44 @@ const updateUser = asyncHandler(async (req, res) => {
     }
 });
 
+
+
+const updateUserProfile = asyncHandler(async (req, res) => {
+
+
+    const data = req.body;
+    const id = req.query.id;
+    console.log("------");
+    
+    console.log(data);
+    console.log(id);
+    const imageUrlString = data.imageUrl;
+    console.log(imageUrlString);
+    
+    // let updateFields = {};
+    // if (data.updateFirstName) updateFields.firstName = data.updateFirstName;
+    // if (data.updateLastName) updateFields.lastName = data.updateLastName;
+    // if (data.updateEmail) updateFields.email = data.updateEmail;
+    // if (data.updateNewPassword) updateFields.password = data.updateNewPassword;
+    // if (data.contactNo) updateFields.contactNo = data.contactNo;
+    // if (data.profileImage) updateFields.profileImage = data.profileImage;
+    try {
+        const updateUserProfile = await User.update(
+            {profileImage: imageUrlString}
+            , {
+                where: {
+                    id: id
+                }
+            })
+        res.status(200).json(updateUserProfile);
+    } catch (error) {
+        res.status(400);
+        throw new Error(error.message || "Unable to update user");
+    }
+});
+
+
+
 // const createBillingAddress = asyncHandler(async (req, res) => {
 //     const data = req.params.data;
 //     const id = req.query.id;
@@ -273,7 +311,7 @@ const createError = asyncHandler(async (req, res) => {
 
 });
 
-module.exports = { getAllUsers, createError, updateUser, getUserByID, getAll, createShippingAddress, updateShippingAddress, getUserOrder, getAddressByID, getAllUserOrderItems };
+module.exports = { getAllUsers, createError, updateUser, getUserByID, getAll, createShippingAddress, updateShippingAddress, getUserOrder, getAddressByID, updateUserProfile, getAllUserOrderItems };
 
 
 
