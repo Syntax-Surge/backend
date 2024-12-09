@@ -12,6 +12,10 @@ const Payments = db.payments;
 
 exports.createPaymentIntent=asyncHandler(async (req, res) => {
     const { total, customer, shipping,items } = req.body;
+    console.log("userrr",req.user,"userrr");
+    const user = req.headers['x-user'] ? JSON.parse(req.headers['x-user']) : null;
+    console.log(user,"user");
+    
 
     try {
   
@@ -28,9 +32,9 @@ exports.createPaymentIntent=asyncHandler(async (req, res) => {
 
     
 
-      console.log(customer, shipping);
+      // console.log(customer, shipping);
       const newOrder = await Orders.create({
-        userId: customer.id,
+        userId: user.id || customer.id,
         firstName: shipping.firstName,
         lastName: shipping.lastName || null,
         addressLine1: shipping.addressLine1,
@@ -43,7 +47,7 @@ exports.createPaymentIntent=asyncHandler(async (req, res) => {
         status: shipping.status,
       });
       
-      console.log(items);
+      // console.log(items);
       // const orderItems = items.map((item) => ({
       //   orderId: newOrder.id,
       //   productId: item.productId,
@@ -59,7 +63,7 @@ exports.createPaymentIntent=asyncHandler(async (req, res) => {
             message: `Product with ID ${item.productId} not found.`,
           });
         }
-      console.log(product);
+      // console.log(product);
   
         if (product.availableQuantity < item.quantity) {
           return res.status(400).json({
