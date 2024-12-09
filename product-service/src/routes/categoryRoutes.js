@@ -5,11 +5,11 @@ const { upload, uploadCategoryImage } = require('../controllers/fileUpload/uploa
 const browseByCategory = require("../controllers/browseByCategory/browseByCategory.controller");
 
 router.get('/' , getCategories)
-router.post('/admin' , createCategory)
+router.post('/' , createCategory)
 router.put('/admin/:id' , updateCategory)
 router.delete('/admin/:id', deleteCategory)
 router.get('/subCategories' , getSubCategories)
-router.post('/admin/uploadCategoryImage', upload.single('image'), uploadCategoryImage);
+router.post('/uploadCategoryImage', upload.single('image'), uploadCategoryImage);
 
 router.get('/browse', browseByCategory);
 

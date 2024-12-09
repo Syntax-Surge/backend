@@ -116,7 +116,7 @@ app.use(cors({
 
 
 const authRoutes = require('./routes/auth routes/authRoutes');
-const adminRoutes = require('./routes/auth routes/adminAuthRoutes');
+// const adminRoutes = require('./routes/auth routes/adminAuthRoutes');
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
 const apiErrorHandler = require('./middlewares/apiErrorHandler');
 const { checkAuthentication } = require('./middlewares/auth');
@@ -124,7 +124,7 @@ const { checkAuthentication } = require('./middlewares/auth');
 // const db = require('./model');
 
 app.use('/' , authRoutes)
-app.use('/admin' , adminRoutes)
+app.use('/admin' , userAdminRoutes)
 
 // const hashedPaswrd = async() => {
 //   const saltRounds = parseInt(process.env.SALT_ROUNDS) || 12;
