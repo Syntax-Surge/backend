@@ -14,7 +14,7 @@ const cookieParser = require('cookie-parser');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors()); 
+app.use(cors({origin: [ "http://localhost:3001" , "http://localhost:3000" ] ,credentials: true} )); 
 app.use(cookieParser());
 
 // Configure Redis client
@@ -129,7 +129,7 @@ app.use('/admin' , adminRoutes)
 // }
 // hashedPaswrd();
 
-app.use('/api/v1/users', userRoutes);
+app.use('/users', userRoutes);
 
 
 
@@ -149,7 +149,7 @@ app.get("/admin/test",(req,res)=>{
   return res.status(200).json({ msg: 'hey admin ' });
 })
 
-app.use('/api/v1/users', userRoutes);
+// app.use('/users', userRoutes);
 // app.use('/api/v1/error',apiErrorHandler, createError);
 
 
