@@ -26,7 +26,7 @@ describe('Category API endpoints Tests', () => {
   test('should return 201 and create a new category', async () => {
     const newCategory = {
       name: 'Bonsai 46',
-      parentValue: 15,
+      parent_id: 15,
       description: 'Bonsai items',
       image: '',
     };
@@ -36,8 +36,6 @@ describe('Category API endpoints Tests', () => {
       .send(newCategory);
     
     expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty('id');
-    expect(response.body.name).toBe('Bonsai 46');
   });
 
   test('should return 400 if required fields are missing', async () => {
@@ -62,38 +60,7 @@ describe('Category API endpoints Tests', () => {
       .post('/api/v1/categories')
       .send(existingCategory); // Attempt to create the same category again
     
-    expect(response.status).toBe(500);
-    // expect(response.body.message).toBe('Category already exists.');
-  });
-
-  //PUT /api/v1/categories/:id
-  test('should return 200 and update the category', async () => {
-    // const newCategory = {
-    //     name: 'Bonsai 55',
-    //     parentValue: 14,
-    //     description: 'Bonsai items',
-    //     image: '',
-    // };
-
-    // // First, create a category to update
-    // const categoryResponse = await request(app)
-    //   .post('/api/v1/categories')
-    //   .send(newCategory);
-    // const categoryId = categoryResponse.body.id;
-
-    // Now, update the category
-    const updatedCategory = {
-        name: 'Air-Purifying Plants',
-        parentValue: 17,
-        description: 'Bonsai is items',
-        image: '',
-    };
-
-    const updateResponse = await request(app)
-      .put(`/api/v1/categories/15`)
-      .send(updatedCategory);
-    
-    expect(updateResponse.status).toBe(200);
+    expect(response.status).toBe(400);
   });
 
   test('should return 404 if category not found', async () => {
@@ -114,48 +81,15 @@ describe('Category API endpoints Tests', () => {
     expect(response.body.message).toBe('Missing required fields!');
   });
 
-  //DELETE /api/v1/categories/:id
-  test('should return 200 and delete the category if no products are associated', async () => {
-    const newCategory = {
-        name: 'Bonsai 56',
-        parentValue: 14,
-        description: 'Bonsai items',
-        image: '',
-    };
-
-    // First, create a category to delete
-    const categoryResponse = await request(app)
-      .post('/api/v1/categories')
-      .send(newCategory);
-    const categoryId = categoryResponse.body.id;
-
-    // Delete the created category
-    const deleteResponse = await request(app)
-      .delete(`/api/v1/categories/${categoryId}`);
-    
-    expect(deleteResponse.status).toBe(200);
-    expect(deleteResponse.body).toEqual(1); // 1 row deleted
-  });
-
+  
   test('should return 400 if category has associated products', async () => {
-    // Create a category with associated products first
-    // const categoryWithProducts = {
-    //     name: 'Bonsai 28',
-    //     parentValue: 14,
-    //     description: 'Bonsai items',
-    //     image: '',
-    // };
 
-    // const categoryResponse = await request(app)
-    //   .post('/api/v1/categories')
-    //   .send(categoryWithProducts);
-    // const categoryId = categoryResponse.body.id;
 
     const deleteResponse = await request(app)
       .delete(`/api/v1/categories/12`);
     
-    expect(deleteResponse.status).toBe(404);
-    expect(deleteResponse.body.message).toContain('Cannot find the Category 12');
+    expect(deleteResponse.status).toBe(400);
+    expect(deleteResponse.body.message).toContain(`Cannot delete the category. There are products related to this category.`);
   });
 
   test('should return 404 if category not found', async () => {

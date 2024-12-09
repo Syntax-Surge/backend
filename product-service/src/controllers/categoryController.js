@@ -233,7 +233,7 @@ const deleteCategory = asyncHandler(async (req, res) => {
             
             console.log("hello") // Check if the array has any products
             res.status(400).send({
-                message: `Cannot delete the category. There are ${products.length} products related to this category.`
+                message: `Cannot delete the category. There are products related to this category.`
             });
             return;
         }

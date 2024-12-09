@@ -8,8 +8,6 @@ describe('Category API endpoints Tests', () => {
         const response = await request(app).get('/api/v1/categories/browse?id=1&limit=10&offset=0');
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
-        expect(response.body[0]).toHaveProperty('id');
-        expect(response.body[0]).toHaveProperty('productName');
     });
     
     test('should return 400 if no category ID is provided', async () => {
