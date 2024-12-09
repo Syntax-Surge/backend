@@ -124,7 +124,7 @@ const { checkAuthentication } = require('./middlewares/auth');
 // const db = require('./model');
 
 app.use('/' , authRoutes)
-app.use('/admin' , adminRoutes)
+app.use('/admin' , userAdminRoutes)
 
 // const hashedPaswrd = async() => {
 //   const saltRounds = parseInt(process.env.SALT_ROUNDS) || 12;
