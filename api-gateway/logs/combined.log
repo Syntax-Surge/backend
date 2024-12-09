@@ -449,3 +449,4 @@
 2024-12-08T17:19:14.338Z [[32minfo[39m]: Response - Status: 200, Method: POST, URL: /
 2024-12-08T17:19:21.854Z [[32minfo[39m]: Request - Method: GET, URL: /api/v1/users/admin/test, IP: ::1
 2024-12-08T17:19:22.658Z [[32minfo[39m]: Response - Status: 200, Method: GET, URL: /test
+2024-12-08T17:27:23.746Z [[32minfo[39m]: API Gateway running on port 3002
