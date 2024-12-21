@@ -13,7 +13,7 @@ exports.forgotPassword = async (req, res) => {
           // const accessToken = generateAccessToken(user._id);
           // console.log("forgotPassword :",user._id);
           // const url = `${CLIENT_URL}/user/reset/${accessToken}`
-          const url = `http://localhost:3000/auth/user/reset/${user.id}`
+          const url = `http://localhost:3000/auth/admin/reset/${user.id}`
       
           sendMail(email , url ,"Reset your admin password")
           
